@@ -1,0 +1,94 @@
+/* Estilo "Misal contemporáneo".
+   Libro litúrgico para músicos: texto en tinta, rúbricas en rojo, filetes dorados,
+   serif para lo que se lee o se canta y sans para la interfaz. Los colores salen de las
+   variables de index.css (:root y body.stage-mode), así sirve para Alabastro y Vigilia. */
+
+/* ── Tipografía ── */
+h1, h2, h3 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.font-headline { font-family: var(--font-title); }
+.font-sacred { font-family: var(--font-brand); letter-spacing: 0.06em; }
+.font-serif { font-family: var(--font-text); }
+.font-chord { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; }
+
+/* ── Encabezado de página ── */
+.misal-header { margin: 0.25rem 0 1.25rem; }
+.misal-header-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+.misal-header-actions { flex-shrink: 0; }
+.misal-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.2rem;
+  font-family: var(--font-brand);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+}
+.misal-eyebrow-icon { display: inline-flex; }
+.misal-eyebrow-icon svg { width: 15px; height: 15px; color: var(--accent-color); fill: none; }
+.misal-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 0.3rem;
+  color: var(--text-primary);
+}
+.misal-desc { margin: 0; color: var(--text-secondary); font-size: 0.95rem; max-width: 70ch; line-height: 1.55; }
+.misal-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0 0;
+  color: var(--gold);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+.misal-rule::before, .misal-rule::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+/* ── Tarjetas: filete fino en lugar de sombra flotante ── */
+.card, .card-static, .card-link, .banner {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.card-link:hover, .banner:hover { box-shadow: var(--shadow-md); border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); }
+
+/* Tarjetas de inicio y secciones: un solo acento */
+.banner .banner-icon-box {
+  background-color: color-mix(in srgb, var(--accent-color) 9%, transparent);
+  color: var(--accent-color);
+}
+.banner-title { font-family: var(--font-title); color: var(--text-primary); }
+.banner-desc { color: var(--text-secondary); }
+.banner-link { color: var(--accent-color); }
+
+/* ── Botones ── */
+.btn { border: 1px solid var(--line); }
+/* Solo botones simples: las variantes (btn-primary, btn-sheet, btn-rhythm...) conservan su color */
+.btn:not([class*=" btn-"]):hover { background-color: var(--surface-tonal); }
+.btn-primary { background-color: var(--accent-color); color: #fff; border-color: transparent; box-shadow: none; }
+.btn-primary:hover { background-color: var(--accent-hover); color: #fff; box-shadow: none; }
+body.stage-mode .btn-primary, body.stage-mode .btn-primary:hover { color: #1c1917; }
+
+/* ── Cantos: letra en serif de lectura y acordes en rojo rúbrica ── */
+.lyric { font-family: var(--font-text); }
+.chord { font-family: 'JetBrains Mono', ui-monospace, monospace; color: var(--chord-color); }
+.song-num-badge { background-color: var(--surface-highlight); color: var(--text-secondary); }
+.group:hover .song-num-badge, .card-link:hover .song-num-badge {
+  background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  color: var(--accent-color);
+}
+.badge {
+  background-color: color-mix(in srgb, var(--accent-color) 9%, transparent);
+  color: var(--accent-color);
+}
+
+/* ── Barra lateral: tinta cálida ── */
+.desktop-nav-rail { background-color: #1a1715; }

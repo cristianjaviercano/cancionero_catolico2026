@@ -1,0 +1,404 @@
+/* Estilos de las secciones de liturgia, devoción y acompañamiento (prefijo vt-).
+   Usan las variables de index.css para respetar el modo Alabastro / Vigilia. */
+
+.vt-page {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 0 4rem;
+  color: var(--text-primary);
+}
+
+.vt-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+.vt-eyebrow {
+  font-family: var(--font-brand);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  margin: 0 0 0.25rem;
+}
+.vt-title {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  line-height: 1.2;
+  margin: 0;
+}
+.vt-sub {
+  color: var(--text-secondary);
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  max-width: 62ch;
+}
+
+.vt-card {
+  background: var(--surface-color);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.vt-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-brand);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  margin: 0 0 0.75rem;
+}
+.vt-card h2, .vt-card h3 { margin-top: 0; }
+
+.vt-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 860px) {
+  .vt-grid-2 { grid-template-columns: 1fr 1fr; }
+  .vt-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .vt-grid-main { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+}
+
+.vt-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.vt-row-between { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.vt-stack { display: flex; flex-direction: column; gap: 0.5rem; }
+.vt-muted { color: var(--text-secondary); }
+.vt-small { font-size: 0.82rem; }
+.vt-xs { font-size: 0.72rem; }
+.vt-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+.vt-center { text-align: center; }
+
+.vt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 0.85rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--surface-highlight);
+  color: var(--text-primary);
+  transition: var(--transition-smooth);
+  text-decoration: none;
+}
+.vt-btn:hover { background: var(--surface-tonal); }
+.vt-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.vt-btn-primary { background: var(--accent-color); color: #fff; }
+body.stage-mode .vt-btn-primary { color: #1c1917; }
+.vt-btn-primary:hover { background: var(--accent-hover); }
+.vt-btn-ghost { background: transparent; }
+.vt-btn-sm { padding: 0.32rem 0.6rem; font-size: 0.78rem; border-radius: 8px; }
+.vt-btn-block { width: 100%; }
+
+.vt-seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  background: var(--surface-highlight);
+  padding: 0.25rem;
+  border-radius: 12px;
+}
+.vt-seg button {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.4rem 0.75rem;
+  border-radius: 9px;
+  cursor: pointer;
+}
+.vt-seg button[aria-pressed='true'] {
+  background: var(--surface-color);
+  color: var(--accent-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.vt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  background: var(--surface-highlight);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.vt-chip-accent { background: rgba(220, 38, 38, 0.1); color: var(--accent-color); }
+.vt-chip-ok { background: rgba(21, 128, 61, 0.12); color: #15803d; }
+.vt-chip-warn { background: rgba(217, 119, 6, 0.14); color: #b45309; }
+
+.vt-dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px var(--surface-color), 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
+.vt-input, .vt-select, .vt-textarea {
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background: var(--surface-highlight);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 0.45rem 0.65rem;
+}
+.vt-input:focus, .vt-select:focus, .vt-textarea:focus { outline: 2px solid var(--accent-color); outline-offset: 1px; }
+.vt-textarea { width: 100%; min-height: 6rem; resize: vertical; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.85rem; }
+
+.vt-label { font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 0.25rem; }
+
+/* ── Día litúrgico ── */
+.vt-day-banner {
+  position: relative;
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem 1.1rem 1.5rem;
+  background: var(--surface-color);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+.vt-day-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: var(--vt-day-color, var(--accent-color));
+}
+.vt-day-title { font-family: var(--font-title); font-weight: 700; font-size: 1.45rem; margin: 0.2rem 0 0.35rem; line-height: 1.3; }
+
+/* ── Lecturas y Horas ── */
+.vt-reading {
+  font-family: var(--font-text);
+  font-size: 1.15rem;
+  line-height: 1.75;
+  white-space: pre-line;
+  margin: 0;
+}
+.vt-reading-ref { font-weight: 700; color: var(--accent-color); margin: 0 0 0.5rem; font-size: 0.95rem; }
+.vt-office { font-family: var(--font-text); font-size: 1.12rem; line-height: 1.65; }
+.vt-office p { margin: 0 0 0.6rem; }
+.vt-office b, .vt-office strong { color: var(--accent-color); }
+.vt-office .vt-office-rubric { color: var(--accent-color); font-style: italic; font-size: 0.9rem; }
+
+/* ── Calendario ── */
+.vt-cal-head, .vt-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.3rem;
+}
+.vt-cal-head span { font-size: 0.7rem; font-weight: 800; text-align: center; color: var(--text-secondary); text-transform: uppercase; }
+.vt-cal-cell {
+  border: none;
+  background: var(--surface-highlight);
+  border-radius: 10px;
+  min-height: 3.6rem;
+  padding: 0.3rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  color: var(--text-primary);
+  font: inherit;
+  position: relative;
+  overflow: hidden;
+}
+.vt-cal-cell[aria-current='date'] { outline: 2px solid var(--accent-color); }
+.vt-cal-cell[aria-pressed='true'] { background: var(--surface-tonal); }
+.vt-cal-cell .vt-cal-num { font-weight: 800; font-size: 0.85rem; }
+.vt-cal-cell .vt-cal-name { font-size: 0.62rem; line-height: 1.2; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.vt-cal-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; }
+@media (max-width: 560px) {
+  .vt-cal-cell .vt-cal-name { display: none; }
+  .vt-cal-cell { min-height: 2.6rem; align-items: center; }
+}
+
+/* ── Acompañamiento ── */
+.vt-step-list { list-style: none; margin: 0; padding: 0; counter-reset: vtstep; display: flex; flex-direction: column; gap: 0.55rem; }
+.vt-step-list li { counter-increment: vtstep; display: grid; grid-template-columns: 1.8rem 1fr; gap: 0.55rem; align-items: start; font-size: 0.9rem; line-height: 1.5; }
+.vt-step-list li::before {
+  content: counter(vtstep);
+  width: 1.8rem; height: 1.8rem; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--surface-highlight); color: var(--accent-color); font-weight: 800; font-size: 0.8rem;
+}
+.vt-kbd {
+  display: inline-block;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.05rem 0.4rem;
+  border-radius: 6px;
+  background: var(--surface-tonal);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.vt-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.vt-table th { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); padding: 0.35rem 0.4rem; }
+.vt-table td { padding: 0.4rem; border-top: 1px solid var(--surface-tonal); vertical-align: top; }
+.vt-table-wrap { overflow-x: auto; }
+
+.vt-strum {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(2.1rem, 1fr);
+  gap: 0.25rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+.vt-strum-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.35rem 0.1rem;
+  border-radius: 8px;
+  background: var(--surface-highlight);
+}
+.vt-strum-step.is-beat { background: var(--surface-tonal); }
+.vt-strum-step.is-now { outline: 2px solid var(--accent-color); }
+.vt-strum-arrow { font-size: 1.25rem; font-weight: 900; line-height: 1; color: var(--accent-color); min-height: 1.3rem; }
+.vt-strum-count { font-size: 0.65rem; font-weight: 700; color: var(--text-secondary); }
+
+.vt-tab {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  background: var(--surface-highlight);
+  border-radius: 10px;
+  padding: 0.75rem;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0;
+}
+
+.vt-abc { overflow-x: auto; background: #fff; border-radius: 10px; padding: 0.5rem; }
+body.stage-mode .vt-abc { background: #f8fafc; }
+
+/* ── Modal ── */
+.vt-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(15, 15, 20, 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+@media (min-width: 720px) { .vt-modal-backdrop { align-items: center; padding: 1.5rem; } }
+.vt-modal {
+  background: var(--bg-color, #f8f9fa);
+  color: var(--text-primary);
+  width: 100%;
+  max-width: 960px;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-radius: 18px 18px 0 0;
+  padding: 1rem;
+  box-shadow: var(--shadow-xl);
+}
+@media (min-width: 720px) { .vt-modal { border-radius: 18px; padding: 1.25rem 1.5rem; } }
+.vt-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem; position: sticky; top: -1rem; background: inherit; padding: 0.5rem 0; z-index: 1; }
+
+/* ── Devoción y seguimiento ── */
+.vt-prayer {
+  font-family: var(--font-text);
+  font-size: 1.12rem;
+  line-height: 1.75;
+  margin: 0;
+  white-space: pre-line;
+}
+.vt-step-pill {
+  border: none;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: var(--surface-highlight);
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.vt-step-pill[aria-current='step'] { background: var(--accent-color); color: #fff; }
+.vt-step-pill.is-done { color: #15803d; }
+.vt-scroll-x { display: flex; gap: 0.35rem; overflow-x: auto; padding-bottom: 0.35rem; }
+
+.vt-heat { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; }
+.vt-heat span { aspect-ratio: 1; border-radius: 4px; background: var(--surface-highlight); }
+.vt-heat span[data-level='1'] { background: rgba(37, 99, 235, 0.35); }
+.vt-heat span[data-level='2'] { background: rgba(37, 99, 235, 0.65); }
+.vt-heat span[data-level='3'] { background: #2563eb; }
+.vt-heat.is-jose span[data-level='1'] { background: rgba(217, 119, 6, 0.35); }
+.vt-heat.is-jose span[data-level='2'] { background: rgba(217, 119, 6, 0.65); }
+.vt-heat.is-jose span[data-level='3'] { background: #d97706; }
+
+.vt-stat { display: flex; flex-direction: column; gap: 0.1rem; }
+.vt-stat strong { font-size: 1.7rem; font-family: var(--font-title); }
+.vt-stat span { font-size: 0.72rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.vt-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+.vt-list-btn {
+  width: 100%;
+  border: none;
+  background: var(--surface-highlight);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.vt-list-btn:hover { background: var(--surface-tonal); }
+
+.vt-litany { display: grid; grid-template-columns: 1fr auto; gap: 0.15rem 1rem; font-size: 0.95rem; line-height: 1.5; }
+.vt-litany .vt-litany-r { color: var(--text-secondary); font-style: italic; font-size: 0.85rem; text-align: right; }
+
+.vt-notice {
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  background: var(--surface-highlight);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.vt-notice-warn { background: rgba(217, 119, 6, 0.12); }
+.vt-attrib { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.75rem; }
+.vt-attrib a { color: var(--accent-color); }
+
+/* Listas con viñetas o números (el reinicio base las deja sin marcas) */
+.vt-ol { list-style: decimal; }
+.vt-ul { list-style: disc; }
+body.stage-mode .vt-step-pill[aria-current='step'] { color: #1c1917; }

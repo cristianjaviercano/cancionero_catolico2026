@@ -1,0 +1,24 @@
+{
+  "name": "VOX TEMPLI — Códice Litúrgico del Salmista",
+  "short_name": "VOX TEMPLI",
+  "description": "Códice canónico para el ministerio musical, salmodia, liturgia y adoración",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#9f1d1d",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/app-icon-512.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

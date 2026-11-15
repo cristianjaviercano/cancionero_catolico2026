@@ -1,0 +1,33 @@
+/* Entrada de estilos de la app.
+   Los componentes están escritos con clases de Tailwind (y cuentan con su reinicio base "preflight":
+   botones sin fondo gris, bordes sólidos). Orden de capas:
+   preflight → index.css (estilos propios) → misal.css (estilo visual) → utilidades de Tailwind.
+   Así las clases de color de cada botón o tarjeta siguen mandando sobre el estilo general.
+   vigilia.css (modo oscuro) va sin capa para tener la última palabra. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "../index.css" layer(base);
+@import "./misal.css" layer(components);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "./vigilia.css";
+
+/* Estilo Misal en las utilidades de Tailwind: fuentes y el rojo rúbrica en lugar del rojo intenso */
+@theme {
+  --font-sans: "Manrope", system-ui, -apple-system, sans-serif;
+  --font-serif: "EB Garamond", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* Gris de textos secundarios más legible (≈4:1 sobre blanco; el original quedaba en 2,6:1) */
+  --color-stone-400: #857c73;
+  --color-red-50: #fbf4f2;
+  --color-red-100: #f5e3df;
+  --color-red-200: #ecc6bf;
+  --color-red-300: #dd9b91;
+  --color-red-400: #c9665b;
+  --color-red-500: #b4382f;
+  --color-red-600: #9f1d1d;
+  --color-red-700: #861818;
+  --color-red-800: #6c1515;
+  --color-red-900: #551313;
+  --color-red-950: #2f0a0a;
+}

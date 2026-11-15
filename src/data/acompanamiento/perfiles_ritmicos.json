@@ -1,0 +1,209 @@
+{
+ "nota": "Perfiles de acompañamiento sugeridos. Los números de estilo y de voz son los del PSR-E383 (ver psr_e383_estilos.json y psr_e383_voces.json). Los tempos son rangos orientativos: el tempo real lo marca la asamblea y el canto.",
+ "secciones": {
+  "intro": "[INTRO/ENDING/rit.] antes de empezar: el estilo arranca con la introducción al tocar el primer acorde.",
+  "estrofa": "MAIN A ([MAIN/AUTO FILL]) para las estrofas.",
+  "coro": "MAIN B para el estribillo; al cambiar suena un relleno (Auto Fill).",
+  "final": "[INTRO/ENDING/rit.] para el final; púlsalo otra vez durante el final para hacer ritardando."
+ },
+ "perfiles": [
+  {
+   "id": "balada_lenta",
+   "nombre": "Balada lenta",
+   "compas": "4/4",
+   "bpm": [60, 76],
+   "bpmSugerido": 68,
+   "caracter": "Íntimo y sereno; deja respirar la letra.",
+   "momentos": ["Comunión", "Meditación", "Ofertorio", "María"],
+   "teclado": {
+    "estilos": [
+     { "numero": 68, "motivo": "Acústico de alabanza, discreto" },
+     { "numero": 37, "motivo": "Balada de piano clásica" },
+     { "numero": 31, "motivo": "Balada acústica sin batería fuerte" },
+     { "numero": 33, "motivo": "Balada con órgano" },
+     { "numero": 257, "motivo": "Piano solo (requiere ACMP y acordes)" }
+    ],
+    "voces": [1, 8, 104],
+    "dual": 104,
+    "consejo": "Volumen de estilo bajo (función 017) para que la voz principal sea el canto."
+   },
+   "guitarra": { "rasgueos": ["balada_bajo", "negras"], "arpegios": ["arp_44_pima", "arp_44_pimi"] },
+   "piano": { "izquierda": "Fundamental en blancas (tiempos 1 y 3) o en octava.", "derecha": "Acorde en arpegio ascendente de corcheas o acordes en blancas." }
+  },
+  {
+   "id": "pop_moderado",
+   "nombre": "Pop / folk moderado",
+   "compas": "4/4",
+   "bpm": [84, 104],
+   "bpmSugerido": 92,
+   "caracter": "Caminante y comunitario; invita a cantar.",
+   "momentos": ["Entrada", "Ofertorio", "Aleluya", "Gloria", "Salida"],
+   "teclado": {
+    "estilos": [
+     { "numero": 69, "motivo": "Acústico de alabanza con más movimiento" },
+     { "numero": 21, "motivo": "8Beat clásico" },
+     { "numero": 27, "motivo": "Pop con guitarra" },
+     { "numero": 80, "motivo": "Folk rock" },
+     { "numero": 117, "motivo": "Patrón didáctico de 4/4 para ensayar" }
+    ],
+    "voces": [5, 75, 101],
+    "dual": 101,
+    "consejo": "MAIN A en estrofas y MAIN B en el estribillo para que el coro crezca."
+   },
+   "guitarra": { "rasgueos": ["pop_folk", "pop_apagado"], "arpegios": ["arp_44_pimi"] },
+   "piano": { "izquierda": "Fundamental en negras o bajo alterno fundamental-quinta.", "derecha": "Acorde en corcheas con acento en 2 y 4." }
+  },
+  {
+   "id": "alegre_rapido",
+   "nombre": "Alabanza alegre",
+   "compas": "4/4",
+   "bpm": [104, 126],
+   "bpmSugerido": 112,
+   "caracter": "Festivo, con energía; ideal para Pascua y animación.",
+   "momentos": ["Animación", "Gloria", "Salida", "Pascua", "Niños"],
+   "teclado": {
+    "estilos": [
+     { "numero": 14, "motivo": "8Beat alegre" },
+     { "numero": 12, "motivo": "8Beat moderno" },
+     { "numero": 22, "motivo": "Off Beat (contratiempo)" },
+     { "numero": 76, "motivo": "Rock contemporáneo para jóvenes" }
+    ],
+    "voces": [5, 74, 150],
+    "dual": null,
+    "consejo": "Evitar en Cuaresma. Usar AUTO FILL antes del estribillo."
+   },
+   "guitarra": { "rasgueos": ["pop_apagado", "pop_folk"], "arpegios": [] },
+   "piano": { "izquierda": "Octavas en negras.", "derecha": "Acordes rítmicos en corcheas con anticipaciones." }
+  },
+  {
+   "id": "vals",
+   "nombre": "Vals",
+   "compas": "3/4",
+   "bpm": [84, 120],
+   "bpmSugerido": 96,
+   "caracter": "Mecido y tierno; muy usado en cantos marianos y navideños.",
+   "momentos": ["María", "Navidad", "Comunión", "Gloria"],
+   "teclado": {
+    "estilos": [
+     { "numero": 87, "motivo": "Vals lento" },
+     { "numero": 260, "motivo": "Vals de piano (requiere ACMP y acordes)" },
+     { "numero": 113, "motivo": "Vals campestre, sencillo" },
+     { "numero": 110, "motivo": "Vals mexicano, más popular" },
+     { "numero": 108, "motivo": "Vals navideño" }
+    ],
+    "voces": [1, 104, 125],
+    "dual": 104,
+    "consejo": "Si el canto tiene compás de 3, el estilo debe ser de vals: un estilo de 4/4 desplaza los acentos."
+   },
+   "guitarra": { "rasgueos": ["vals", "vals_arriba"], "arpegios": ["arp_34"] },
+   "piano": { "izquierda": "Fundamental en el tiempo 1.", "derecha": "Acorde en los tiempos 2 y 3." }
+  },
+  {
+   "id": "seis_ocho",
+   "nombre": "Balada en 6/8",
+   "compas": "6/8",
+   "bpm": [48, 66],
+   "bpmSugerido": 56,
+   "caracter": "Ondulante y contemplativo. El BPM se cuenta en negra con puntillo (2 pulsos por compás).",
+   "momentos": ["Comunión", "Adoración", "Cuaresma", "Meditación"],
+   "teclado": {
+    "estilos": [
+     { "numero": 30, "motivo": "Balada 6/8" },
+     { "numero": 86, "motivo": "Slow rock 6/8" },
+     { "numero": 256, "motivo": "Slow rock de piano (requiere ACMP y acordes)" },
+     { "numero": 39, "motivo": "6/8 con piano eléctrico" },
+     { "numero": 118, "motivo": "Patrón didáctico de 6/8" }
+    ],
+    "voces": [1, 106, 129],
+    "dual": 106,
+    "consejo": "Si el estilo se siente rápido, revisa si el teclado cuenta en corcheas; ajusta el tempo con [TEMPO/TAP]."
+   },
+   "guitarra": { "rasgueos": ["seis_ocho"], "arpegios": ["arp_68"] },
+   "piano": { "izquierda": "Fundamental en los tiempos 1 y 4.", "derecha": "Arpegio de corcheas 1-5-8-10-8-5." }
+  },
+  {
+   "id": "marcha",
+   "nombre": "Marcha procesional",
+   "compas": "2/4",
+   "bpm": [100, 120],
+   "bpmSugerido": 108,
+   "caracter": "Solemne y firme; acompaña el paso de la procesión.",
+   "momentos": ["Entrada", "Salida", "Procesiones", "Domingo de Ramos"],
+   "teclado": {
+    "estilos": [
+     { "numero": 100, "motivo": "Marcha estadounidense en 2/4" },
+     { "numero": 101, "motivo": "Marcha en 6/8" },
+     { "numero": 259, "motivo": "Marcha de piano en 6/8 (requiere ACMP y acordes)" },
+     { "numero": 116, "motivo": "Patrón didáctico de 2/4" }
+    ],
+    "voces": [54, 55, 150],
+    "dual": 150,
+    "consejo": "Con órgano (54/55) suena solemne aun sin estilo: ACMP apagado y acordes sostenidos."
+   },
+   "guitarra": { "rasgueos": ["marcha"], "arpegios": ["arp_24"] },
+   "piano": { "izquierda": "Bajo alterno fundamental-quinta en cada tiempo.", "derecha": "Acorde en los contratiempos." }
+  },
+  {
+   "id": "himno_organo",
+   "nombre": "Himno sin batería",
+   "compas": "4/4",
+   "bpm": [66, 84],
+   "bpmSugerido": 72,
+   "caracter": "Sobrio: el instrumento sostiene a la asamblea. Recomendado para Santo, Cordero, Piedad y salmo.",
+   "momentos": ["Santo", "Cordero", "Piedad", "Salmo", "Cuaresma", "Adviento"],
+   "teclado": {
+    "estilos": [
+     { "numero": 255, "motivo": "Arpegio sin batería (requiere ACMP y acordes)" }
+    ],
+    "voces": [53, 54, 56],
+    "dual": 104,
+    "consejo": "Lo más litúrgico: ACMP apagado, voz de órgano (53 Chapel Organ) y acordes completos a cuatro voces. Cambia de acorde con la sílaba fuerte."
+   },
+   "guitarra": { "rasgueos": ["negras"], "arpegios": ["arp_44_pimi", "arp_24"] },
+   "piano": { "izquierda": "Bajo en la fundamental, sostenido.", "derecha": "Acorde a tres voces que sigue la melodía." }
+  },
+  {
+   "id": "latino_colombiano",
+   "nombre": "Ritmo colombiano / latino",
+   "compas": "4/4",
+   "bpm": [88, 110],
+   "bpmSugerido": 96,
+   "caracter": "Festivo y de raíz popular. Mejor en animación, encuentros y fiestas patronales que en la misa dominical.",
+   "momentos": ["Animación", "Niños", "Pascua Joven", "Fiestas patronales"],
+   "teclado": {
+    "estilos": [
+     { "numero": 129, "motivo": "Cumbia colombiana" },
+     { "numero": 130, "motivo": "Vallenato" },
+     { "numero": 131, "motivo": "Joropo (llanero, en 3)" },
+     { "numero": 121, "motivo": "Bossa nova, para meditación con color latino" },
+     { "numero": 136, "motivo": "Merengue" }
+    ],
+    "voces": [5, 72, 177],
+    "dual": null,
+    "consejo": "Evitar en Cuaresma y en momentos de recogimiento."
+   },
+   "guitarra": { "rasgueos": ["cumbia", "pop_apagado"], "arpegios": [] },
+   "piano": { "izquierda": "Bajo en 1 y 3 con anticipación.", "derecha": "Acordes en contratiempo (montuno sencillo)." }
+  },
+  {
+   "id": "ambiente_adoracion",
+   "nombre": "Ambiente de adoración",
+   "compas": "4/4",
+   "bpm": [56, 68],
+   "bpmSugerido": 60,
+   "caracter": "Colchón sonoro para la exposición del Santísimo y los silencios orantes.",
+   "momentos": ["Adoración", "Adoración Eucarística", "Meditación"],
+   "teclado": {
+    "estilos": [
+     { "numero": 255, "motivo": "Arpegio suave (requiere ACMP y acordes)" },
+     { "numero": 90, "motivo": "Ambiente cinematográfico (requiere ACMP y acordes)" }
+    ],
+    "voces": [236, 9, 129],
+    "dual": 129,
+    "consejo": "ACMP apagado y acordes largos con voz 236 Sweet Heaven + DUAL 129 Air Choir."
+   },
+   "guitarra": { "rasgueos": ["negras"], "arpegios": ["arp_44_pima"] },
+   "piano": { "izquierda": "Quinta abierta (fundamental + quinta) sostenida.", "derecha": "Acordes en registro medio, sin prisa." }
+  }
+ ]
+}

@@ -1,0 +1,33 @@
+{
+ "leyenda": {
+  "D": "Rasgueo hacia abajo",
+  "U": "Rasgueo hacia arriba",
+  "B": "Bajo: pulgar en la cuerda grave del acorde",
+  "X": "Apagado: golpe con la palma o los dedos sobre las cuerdas (chasquido)",
+  "-": "Pausa: la mano sigue el vaivén sin tocar",
+  "p": "Pulgar en la cuerda grave del acorde",
+  "p2": "Pulgar en la siguiente cuerda grave (bajo alterno)",
+  "i": "Índice en la 3.ª cuerda (Sol)",
+  "m": "Medio en la 2.ª cuerda (Si)",
+  "a": "Anular en la 1.ª cuerda (Mi aguda)"
+ },
+ "nota": "Cada paso es una subdivisión del pulso. 'subdivision' indica cuántos pasos hay por tiempo (2 = corcheas, 3 = tresillos o compás de 6/8).",
+ "rasgueos": [
+  { "id": "negras", "nombre": "Negras (para empezar)", "compas": "4/4", "subdivision": 2, "pasos": ["D", "-", "D", "-", "D", "-", "D", "-"], "nivel": "Básico", "uso": "Aprender el canto y llevar el pulso estable" },
+  { "id": "balada_bajo", "nombre": "Balada con bajo", "compas": "4/4", "subdivision": 2, "pasos": ["B", "-", "D", "U", "B", "-", "D", "U"], "nivel": "Básico", "uso": "Comunión, meditación, cantos marianos lentos" },
+  { "id": "pop_folk", "nombre": "Pop / folk", "compas": "4/4", "subdivision": 2, "pasos": ["D", "-", "D", "U", "-", "U", "D", "U"], "nivel": "Intermedio", "uso": "Entrada, ofertorio, salida y la mayoría de cantos de grupo" },
+  { "id": "pop_apagado", "nombre": "Pop con apagado", "compas": "4/4", "subdivision": 2, "pasos": ["D", "-", "X", "U", "-", "U", "X", "U"], "nivel": "Intermedio", "uso": "Cantos alegres y de animación; el apagado marca los tiempos 2 y 4" },
+  { "id": "marcha", "nombre": "Marcha (bajo y acorde)", "compas": "2/4", "subdivision": 2, "pasos": ["B", "-", "D", "-"], "nivel": "Básico", "uso": "Entradas procesionales y cantos en 2/4" },
+  { "id": "vals", "nombre": "Vals", "compas": "3/4", "subdivision": 2, "pasos": ["B", "-", "D", "-", "D", "-"], "nivel": "Básico", "uso": "Cantos marianos, Navidad y cantos en 3/4" },
+  { "id": "vals_arriba", "nombre": "Vals con arriba", "compas": "3/4", "subdivision": 2, "pasos": ["B", "-", "D", "U", "D", "U"], "nivel": "Intermedio", "uso": "Vals más movido para coros y estribillos" },
+  { "id": "seis_ocho", "nombre": "Balada en 6/8", "compas": "6/8", "subdivision": 3, "pasos": ["B", "D", "U", "B", "D", "U"], "nivel": "Intermedio", "uso": "Comunión y adoración en 6/8; se cuenta 1-2-3, 4-5-6" },
+  { "id": "cumbia", "nombre": "Cumbia", "compas": "4/4", "subdivision": 2, "pasos": ["B", "U", "X", "U", "B", "U", "X", "U"], "nivel": "Intermedio", "uso": "Animación, encuentros juveniles y fiestas patronales" }
+ ],
+ "arpegios": [
+  { "id": "arp_44_pima", "nombre": "Arpegio p-i-m-a", "compas": "4/4", "subdivision": 2, "pasos": ["p", "i", "m", "a", "p2", "i", "m", "a"], "nivel": "Intermedio", "uso": "Comunión, meditación e introducciones" },
+  { "id": "arp_44_pimi", "nombre": "Arpegio p-i-m-i (suave)", "compas": "4/4", "subdivision": 2, "pasos": ["p", "i", "m", "i", "p2", "i", "m", "i"], "nivel": "Básico", "uso": "Acompañar al salmista sin tapar la voz" },
+  { "id": "arp_34", "nombre": "Arpegio de vals p-i-m-a-m-i", "compas": "3/4", "subdivision": 2, "pasos": ["p", "i", "m", "a", "m", "i"], "nivel": "Intermedio", "uso": "Cantos marianos y Navidad en 3/4" },
+  { "id": "arp_68", "nombre": "Arpegio en 6/8", "compas": "6/8", "subdivision": 3, "pasos": ["p", "i", "m", "a", "m", "i"], "nivel": "Intermedio", "uso": "Baladas en 6/8, adoración" },
+  { "id": "arp_24", "nombre": "Arpegio p-i-m-i en 2/4", "compas": "2/4", "subdivision": 2, "pasos": ["p", "i", "m", "i"], "nivel": "Básico", "uso": "Cantos breves y aclamaciones" }
+ ]
+}

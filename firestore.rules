@@ -1,0 +1,215 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: users/{userId}/{document=**}
+// Document ID: userId (Firebase Auth UID) and nested user documents
+// Access: Strictly restricted to the authenticated owner (request.auth.uid == userId).
+//
+// Collection: publicSongs/{songId}
+// Document ID: custom_<id> (must match ^custom_.*)
+// Fields:
+//   - id: string (required, immutable, must equal songId)
+//   - userId: string (required, immutable, must equal request.auth.uid)
+//   - plus song metadata fields
+//
+// Collection: publicMasses/{massId}
+// Document ID: <uid>_<id> (must match ^<request.auth.uid>_.*)
+// Fields:
+//   - userId: string (required, immutable, must equal request.auth.uid)
+//   - plus liturgical mass plan fields
+//
+// Collection: liveSessions/{sessionId}
+// Document ID: 4 to 10 uppercase alphanumeric code (^[A-Z0-9]{4,10}$)
+// Fields:
+//   - code: string (required, immutable, must equal sessionId)
+//   - hostId: string (required, immutable, length 8..128) - host session token/ID
+//   - hostName: string (required, length 1..80) - display name of choir director
+//   - status: string (required, 'active' | 'ended') - live session state
+//   - currentIndex: int (required, 0..100) - active song index in playlist
+//   - transpose: int (required, -12..12) - real-time semitone transposition
+//   - playlist: list (required, max 50 items) - ordered liturgical songs for the session
+//   - hostUid: string | null (optional, immutable, must equal request.auth.uid when authenticated)
+//   - massTitle: string | null (optional, max 150 chars)
+//   - currentSongId: string | null (optional, max 120 chars)
+//   - bpm: number | null (optional, 20..300)
+//   - compas: string | null (optional, max 20 chars)
+//   - beatType: string | number | null (optional)
+//   - isScrolling: bool (optional)
+//   - scrollSpeed: number | null (optional, 0..20)
+//   - updatedAt: timestamp | int | string (optional)
+//   - createdAt: timestamp | int | string (optional, immutable if present)
+//   - expiresAt: timestamp | int | string (optional)
+//   - partNotes: string | map | null (optional)
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function isValidSessionId(sessionId) {
+      return sessionId.matches('^[A-Z0-9]{4,10}$');
+    }
+
+    function isValidLiveSession(data, sessionId) {
+      let requiredFields = [
+        'code',
+        'hostId',
+        'hostName',
+        'status',
+        'currentIndex',
+        'transpose',
+        'playlist'
+      ];
+      let allowedFields = [
+        'code',
+        'hostId',
+        'hostName',
+        'status',
+        'currentIndex',
+        'transpose',
+        'playlist',
+        'hostUid',
+        'massTitle',
+        'currentSongId',
+        'bpm',
+        'compas',
+        'beatType',
+        'isScrolling',
+        'scrollSpeed',
+        'updatedAt',
+        'createdAt',
+        'expiresAt',
+        'partNotes'
+      ];
+
+      return hasRequiredFields(requiredFields)
+        && hasOnlyAllowedFields(allowedFields)
+        && data.code is string
+        && data.code == sessionId
+        && data.hostId is string
+        && data.hostId.size() >= 8
+        && data.hostId.size() <= 128
+        && data.hostName is string
+        && data.hostName.size() >= 1
+        && data.hostName.size() <= 80
+        && data.status is string
+        && (data.status == 'active' || data.status == 'ended')
+        && data.currentIndex is int
+        && data.currentIndex >= 0
+        && data.currentIndex <= 100
+        && data.transpose is int
+        && data.transpose >= -12
+        && data.transpose <= 12
+        && data.playlist is list
+        && data.playlist.size() <= 50
+        && (!('hostUid' in data) || data.hostUid == null || (data.hostUid is string && data.hostUid.size() >= 1 && data.hostUid.size() <= 128))
+        && (!('massTitle' in data) || data.massTitle == null || (data.massTitle is string && data.massTitle.size() <= 150))
+        && (!('currentSongId' in data) || data.currentSongId == null || (data.currentSongId is string && data.currentSongId.size() <= 120))
+        && (!('bpm' in data) || data.bpm == null || (data.bpm is number && data.bpm >= 20 && data.bpm <= 300))
+        && (!('compas' in data) || data.compas == null || (data.compas is string && data.compas.size() <= 20))
+        && (!('beatType' in data) || data.beatType == null || (data.beatType is string && data.beatType.size() <= 40) || (data.beatType is number && data.beatType >= 0 && data.beatType <= 32))
+        && (!('isScrolling' in data) || data.isScrolling is bool)
+        && (!('scrollSpeed' in data) || data.scrollSpeed == null || (data.scrollSpeed is number && data.scrollSpeed >= 0 && data.scrollSpeed <= 20))
+        && (!('updatedAt' in data) || data.updatedAt is timestamp || data.updatedAt is int || (data.updatedAt is string && data.updatedAt.size() <= 64))
+        && (!('createdAt' in data) || data.createdAt is timestamp || data.createdAt is int || (data.createdAt is string && data.createdAt.size() <= 64))
+        && (!('expiresAt' in data) || data.expiresAt is timestamp || data.expiresAt is int || (data.expiresAt is string && data.expiresAt.size() <= 64))
+        && (!('partNotes' in data) || data.partNotes == null || (data.partNotes is string && data.partNotes.size() <= 1000) || (data.partNotes is map && data.partNotes.size() <= 50));
+    }
+
+    function isValidLiveSessionHostCreate(data) {
+      return (!('hostUid' in data) || data.hostUid == null)
+        || (isAuthenticated() && data.hostUid == request.auth.uid);
+    }
+
+    function isValidLiveSessionHostUpdate() {
+      return request.resource.data.hostId == resource.data.hostId
+        && request.resource.data.code == resource.data.code
+        && request.resource.data.get('hostUid', null) == resource.data.get('hostUid', null)
+        && (!('createdAt' in resource.data) || request.resource.data.get('createdAt', null) == resource.data.createdAt)
+        && (
+          resource.data.get('hostUid', null) == null
+          || (isAuthenticated() && request.auth.uid == resource.data.hostUid)
+        );
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    match /users/{userId}/{document=**} {
+      allow read, write: if isOwner(userId);
+    }
+
+    match /publicSongs/{songId} {
+      allow read: if true;
+      // Solo se publican cantos creados en el editor (custom_...), a nombre de quien los crea
+      // y con el mismo id dentro del documento: así nadie puede reemplazar un canto de la base ni uno ajeno.
+      allow create: if isAuthenticated()
+        && songId.matches('custom_.*')
+        && request.resource.data.id == songId
+        && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.id == songId
+        && request.resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    match /publicMasses/{massId} {
+      allow read: if true;
+      allow create: if isAuthenticated()
+        && request.resource.data.userId == request.auth.uid
+        && massId.matches(request.auth.uid + '_.*');
+      allow update: if isAuthenticated()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    match /liveSessions/{sessionId} {
+      // Cualquier miembro del coro puede unirse y escuchar en tiempo real mediante el código o QR
+      allow read: if true;
+
+      allow create: if isValidSessionId(sessionId)
+        && isValidLiveSession(request.resource.data, sessionId)
+        && isValidLiveSessionHostCreate(request.resource.data);
+
+      allow update: if isValidSessionId(sessionId)
+        && isValidLiveSession(request.resource.data, sessionId)
+        && isValidLiveSessionHostUpdate();
+
+      allow delete: if isValidSessionId(sessionId)
+        && (
+          resource.data.get('hostUid', null) == null
+          || (isAuthenticated() && resource.data.get('hostUid', null) == request.auth.uid)
+        );
+    }
+
+    // Default deny for any other unmatched paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

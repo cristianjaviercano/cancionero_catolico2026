@@ -1,0 +1,50 @@
+{
+ "nota": "Orden de perfiles sugeridos según el tipo de canto del repertorio. El primero es la sugerencia principal. Si el canto no tiene tipo conocido se usa 'default'.",
+ "porTipo": {
+  "Entrada": ["pop_moderado", "marcha", "alegre_rapido"],
+  "Piedad": ["himno_organo", "balada_lenta"],
+  "Gloria": ["pop_moderado", "alegre_rapido", "vals"],
+  "Salmo": ["himno_organo", "balada_lenta", "vals"],
+  "Aleluya": ["pop_moderado", "alegre_rapido"],
+  "Ofertorio": ["balada_lenta", "pop_moderado", "seis_ocho"],
+  "Santo": ["himno_organo", "pop_moderado", "marcha"],
+  "Paz": ["pop_moderado", "balada_lenta"],
+  "Cordero": ["himno_organo", "balada_lenta"],
+  "Comunión": ["balada_lenta", "seis_ocho", "vals"],
+  "Salida": ["pop_moderado", "marcha", "alegre_rapido"],
+  "María": ["vals", "balada_lenta", "seis_ocho"],
+  "Meditación": ["balada_lenta", "seis_ocho", "ambiente_adoracion"],
+  "Adoración": ["ambiente_adoracion", "balada_lenta", "seis_ocho"],
+  "Adoración Eucarística": ["ambiente_adoracion", "balada_lenta", "seis_ocho"],
+  "Eucaristía": ["balada_lenta", "seis_ocho"],
+  "Espíritu Santo": ["pop_moderado", "balada_lenta"],
+  "Pentecostés": ["pop_moderado", "alegre_rapido"],
+  "Adviento": ["balada_lenta", "himno_organo"],
+  "Navidad": ["vals", "pop_moderado", "balada_lenta"],
+  "Cuaresma": ["himno_organo", "seis_ocho", "balada_lenta"],
+  "Pascua": ["alegre_rapido", "pop_moderado"],
+  "Pascua Joven": ["alegre_rapido", "latino_colombiano"],
+  "Animación": ["latino_colombiano", "alegre_rapido"],
+  "Niños": ["alegre_rapido", "latino_colombiano"],
+  "Alabanza": ["alegre_rapido", "pop_moderado"],
+  "San José": ["vals", "balada_lenta"],
+  "Misiones": ["pop_moderado", "marcha"],
+  "Iglesia": ["pop_moderado", "marcha"],
+  "Varias": ["pop_moderado", "balada_lenta"],
+  "default": ["pop_moderado", "balada_lenta"]
+ },
+ "porTiempo": {
+  "cuaresma": {
+   "evitar": ["alegre_rapido", "latino_colombiano"],
+   "aviso": "En Cuaresma los instrumentos solo sostienen el canto (IGMR 313): mejor sin baterías festivas y con más sobriedad."
+  },
+  "adviento": {
+   "evitar": ["latino_colombiano"],
+   "aviso": "En Adviento el acompañamiento es moderado, sin la plenitud festiva reservada para Navidad (IGMR 313)."
+  },
+  "triduo": {
+   "evitar": ["alegre_rapido", "latino_colombiano", "pop_moderado"],
+   "aviso": "Del Gloria del Jueves Santo a la Vigilia Pascual los instrumentos solo sostienen el canto."
+  }
+ }
+}

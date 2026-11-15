@@ -1,0 +1,1566 @@
+{
+ "fuente": "Yamaha PSR-E383/PSR-EW320/YPT-380/YPT-W320 Data List, págs. 16-17 (usa.yamaha.com, PSR-E383_DL_EnFrEsDeZhRu_A0_web.pdf)",
+ "nota": "soloConAcmp = estilo marcado con asterisco: no tiene parte de ritmo; solo suena con ACMP encendido y tocando acordes en la zona de acompañamiento.",
+ "estilos": [
+  {
+   "numero": 1,
+   "nombre": "80s Guitar Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 2,
+   "nombre": "20s Electric Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 3,
+   "nombre": "20s Urban Latin",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 4,
+   "nombre": "20s Dance Pop 1",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 5,
+   "nombre": "20s Diva Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 6,
+   "nombre": "20s Synth Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 7,
+   "nombre": "20s Dance Pop 2",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 8,
+   "nombre": "20s Dance Pop 3",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 9,
+   "nombre": "80s Diva Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 10,
+   "nombre": "2019 Dancehall Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 11,
+   "nombre": "Viva Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 12,
+   "nombre": "8Beat Modern",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 13,
+   "nombre": "Cool 8Beat",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 14,
+   "nombre": "Happy 8Beat",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 15,
+   "nombre": "Shake 8Beat",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 16,
+   "nombre": "Boy Band Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 17,
+   "nombre": "Sweet Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 18,
+   "nombre": "60s Guitar Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 19,
+   "nombre": "8Beat Adria",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 20,
+   "nombre": "60s 8Beat",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 21,
+   "nombre": "8Beat",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 22,
+   "nombre": "Off Beat",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 23,
+   "nombre": "16Beat",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 24,
+   "nombre": "Dancehall Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 25,
+   "nombre": "Cinematic Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 26,
+   "nombre": "Pop Shuffle",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 27,
+   "nombre": "Guitar Pop",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 28,
+   "nombre": "16Beat Uptempo",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 29,
+   "nombre": "Kool Shuffle",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 30,
+   "nombre": "6/8 Chart Ballad",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 31,
+   "nombre": "Unplugged Ballad",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 32,
+   "nombre": "70s Glam Piano",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 33,
+   "nombre": "Organ Ballad",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 34,
+   "nombre": "Epic Diva Ballad",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 35,
+   "nombre": "Pop Ballad",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 36,
+   "nombre": "16Beat Ballad",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 37,
+   "nombre": "Piano Ballad",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 38,
+   "nombre": "Love Song",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 39,
+   "nombre": "6/8 Modern Ep",
+   "categoria": "Pop",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 40,
+   "nombre": "Big Band Fast",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 41,
+   "nombre": "Big Band Medium",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 42,
+   "nombre": "Big Band Ballad",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 43,
+   "nombre": "Big Band Shuffle",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 44,
+   "nombre": "Acoustic Jazz",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 45,
+   "nombre": "Blue Jazz",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 46,
+   "nombre": "Acid Jazz",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 47,
+   "nombre": "Jazz Club",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 48,
+   "nombre": "Swing 1",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 49,
+   "nombre": "Swing 2",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 50,
+   "nombre": "Orchestra Swing",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 51,
+   "nombre": "Five/Four",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 52,
+   "nombre": "Jazz Ballad",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 53,
+   "nombre": "Dixieland",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 54,
+   "nombre": "Ragtime",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 55,
+   "nombre": "Afro Cuban",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 56,
+   "nombre": "Charleston",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 57,
+   "nombre": "Blues Rock",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 58,
+   "nombre": "UK Soul",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 59,
+   "nombre": "Just R&B",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 60,
+   "nombre": "Soul",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 61,
+   "nombre": "Detroit Pop",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 62,
+   "nombre": "60s Rock & Roll",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 63,
+   "nombre": "6/8 Soul",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 64,
+   "nombre": "Croco Twist",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 65,
+   "nombre": "Rock & Roll",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 66,
+   "nombre": "Combo Boogie",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 67,
+   "nombre": "6/8 Blues",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 68,
+   "nombre": "Worship Acoustic 1",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 69,
+   "nombre": "Worship Acoustic 2",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 70,
+   "nombre": "Worship Rock Ballad",
+   "categoria": "Jazz & R&B",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 71,
+   "nombre": "Brit Pop Rock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 72,
+   "nombre": "Grunge Rock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 73,
+   "nombre": "90s UK Rock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 74,
+   "nombre": "UK Soft Rock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 75,
+   "nombre": "90s Indie Rock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 76,
+   "nombre": "Contemporary Rock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 77,
+   "nombre": "Stadium Rock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 78,
+   "nombre": "70s Rock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 79,
+   "nombre": "Hard Rock 1",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 80,
+   "nombre": "Folkrock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 81,
+   "nombre": "60s Rock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 82,
+   "nombre": "Hard Rock 2",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 83,
+   "nombre": "Rock Shuffle",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 84,
+   "nombre": "8Beatt Rock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 85,
+   "nombre": "Orchestra Rock Ballad",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 86,
+   "nombre": "6/8 Slow Rock",
+   "categoria": "Rock",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 87,
+   "nombre": "Slow Waltz",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 88,
+   "nombre": "Viennese Waltz",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 89,
+   "nombre": "English Waltz",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 90,
+   "nombre": "Ethereal Movie",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": true
+  },
+  {
+   "numero": 91,
+   "nombre": "Slowfox",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 92,
+   "nombre": "Foxtrot",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 93,
+   "nombre": "Quickstep",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 94,
+   "nombre": "Tango",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 95,
+   "nombre": "Pasodoble",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 96,
+   "nombre": "Samba",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 97,
+   "nombre": "Cha Cha Cha",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 98,
+   "nombre": "Rumba",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 99,
+   "nombre": "Jive",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 100,
+   "nombre": "US March",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 101,
+   "nombre": "6/8 March",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 102,
+   "nombre": "German March",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 103,
+   "nombre": "Polka Pop",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 104,
+   "nombre": "Oberkrainer Polka",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 105,
+   "nombre": "Tarantella",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 106,
+   "nombre": "Showtune",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 107,
+   "nombre": "Christmas Swing",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 108,
+   "nombre": "Christmas Waltz",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 109,
+   "nombre": "Italian Waltz",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 110,
+   "nombre": "Vals Mexicano",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 111,
+   "nombre": "Swing Waltz",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 112,
+   "nombre": "Jazz Waltz",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 113,
+   "nombre": "Country Waltz",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 114,
+   "nombre": "Oberkrainer Walzer",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 115,
+   "nombre": "Musette",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 116,
+   "nombre": "Learning 2/4",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 117,
+   "nombre": "Learning 4/4",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 118,
+   "nombre": "Learning 6/8",
+   "categoria": "Entretenimiento",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 119,
+   "nombre": "Brazilian Samba",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 120,
+   "nombre": "Brazilian Bossa",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 121,
+   "nombre": "Bossa Nova",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 122,
+   "nombre": "Pop Bossa",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 123,
+   "nombre": "Forro",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 124,
+   "nombre": "Sertanejo 1",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 125,
+   "nombre": "Sertanejo 2",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 126,
+   "nombre": "Baião",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 127,
+   "nombre": "Tango Argentino",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 128,
+   "nombre": "Cumbia Peruana",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 129,
+   "nombre": "Cumbia Colombiana",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 130,
+   "nombre": "Vallenato",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 131,
+   "nombre": "Joropo",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 132,
+   "nombre": "Parranda",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 133,
+   "nombre": "Bachata",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 134,
+   "nombre": "Cuban Son",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 135,
+   "nombre": "Guajira",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 136,
+   "nombre": "Merengue",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 137,
+   "nombre": "Reggaeton",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 138,
+   "nombre": "Reggaeton Pop",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 139,
+   "nombre": "Reggaeton Slow Jam",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 140,
+   "nombre": "Tijuana",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 141,
+   "nombre": "Paso Duranguense",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 142,
+   "nombre": "Cumbia Grupera",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 143,
+   "nombre": "Balada Banda",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 144,
+   "nombre": "Mexican Mambo",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 145,
+   "nombre": "Disco Latin",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 146,
+   "nombre": "Mambo",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 147,
+   "nombre": "Salsa",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 148,
+   "nombre": "Beguine",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 149,
+   "nombre": "Guitar Rumba",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 150,
+   "nombre": "Rumba Island",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 151,
+   "nombre": "Reggae",
+   "categoria": "Latino",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 152,
+   "nombre": "Country Pop",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 153,
+   "nombre": "Country Swing",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 154,
+   "nombre": "Country 2/4",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 155,
+   "nombre": "Bluegrass",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 156,
+   "nombre": "Hawaiian",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 157,
+   "nombre": "Celtic Dance",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 158,
+   "nombre": "Scottish Reel",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 159,
+   "nombre": "4/4 Standart",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 160,
+   "nombre": "Rumba 2/4",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 161,
+   "nombre": "Saeidy",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 162,
+   "nombre": "Wehda Saghira",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 163,
+   "nombre": "Iranian Elec",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 164,
+   "nombre": "Emarati",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 165,
+   "nombre": "High Life 3",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 166,
+   "nombre": "Afro Beat 1",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 167,
+   "nombre": "Party Juju",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 168,
+   "nombre": "African Gospel Reggae",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 169,
+   "nombre": "High Life 1",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 170,
+   "nombre": "African Gospel",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 171,
+   "nombre": "Makossa",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 172,
+   "nombre": "Modern Afrobeat",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 173,
+   "nombre": "High Life 2",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 174,
+   "nombre": "Igbo High Life",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 175,
+   "nombre": "Soca",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 176,
+   "nombre": "Organ High Life",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 177,
+   "nombre": "Azonto",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 178,
+   "nombre": "Lingala",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 179,
+   "nombre": "Afro Beat 2",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 180,
+   "nombre": "Gospel Kwaito",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 181,
+   "nombre": "African Rumba",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 182,
+   "nombre": "Benga",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 183,
+   "nombre": "Maskandi",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 184,
+   "nombre": "Gqom",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 185,
+   "nombre": "Itende",
+   "categoria": "Mundo 1",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 186,
+   "nombre": "Indian Pop",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 187,
+   "nombre": "Bhangra",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 188,
+   "nombre": "Bhajan",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 189,
+   "nombre": "Bolly Mix",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 190,
+   "nombre": "Tamil",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 191,
+   "nombre": "Kerala",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 192,
+   "nombre": "Goan Pop",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 193,
+   "nombre": "Rajasthan",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 194,
+   "nombre": "Dandiya",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 195,
+   "nombre": "Qawwali",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 196,
+   "nombre": "Folk Hills",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 197,
+   "nombre": "Modern Dangdut 1",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 198,
+   "nombre": "Keroncong",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 199,
+   "nombre": "Modern Dangdut 2",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 200,
+   "nombre": "Dangdut Umum",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 201,
+   "nombre": "Dangdut Slow Legend",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 202,
+   "nombre": "Dangdut 3/4",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 203,
+   "nombre": "Koplo Rampak",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 204,
+   "nombre": "Langgam Modern",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 205,
+   "nombre": "Dangdut Jawa",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 206,
+   "nombre": "Congdut",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 207,
+   "nombre": "Koplo Jaranan",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 208,
+   "nombre": "Dangdut Slow Koplo",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 209,
+   "nombre": "Dangdut Rock",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 210,
+   "nombre": "Dangdut Manual",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 211,
+   "nombre": "Jaipong Jawa Slow",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 212,
+   "nombre": "Vietnamese Pop Ballad",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 213,
+   "nombre": "Vietnamese 6/8 Ballad",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 214,
+   "nombre": "Vietnamese Guitar Ballad",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 215,
+   "nombre": "Vietnamese 16Beat Ballad",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 216,
+   "nombre": "Vietnamese Slow Ballad",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 217,
+   "nombre": "Vietnamese Latin Pop",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 218,
+   "nombre": "Xi Qing Luo Gu",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 219,
+   "nombre": "Jing Ju Jie Zou",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 220,
+   "nombre": "Yi Zu Min Ge",
+   "categoria": "Mundo 2",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 221,
+   "nombre": "20s Disco Pop",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 222,
+   "nombre": "20s Disco",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 223,
+   "nombre": "Sky Pop",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 224,
+   "nombre": "DJ Mix 2019",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 225,
+   "nombre": "DJ Mix 2017",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 226,
+   "nombre": "Agag Beat",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 227,
+   "nombre": "US Hip Hop",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 228,
+   "nombre": "Hip Hop Light",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 229,
+   "nombre": "Retro Club",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 230,
+   "nombre": "Club Beat",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 231,
+   "nombre": "Electronica",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 232,
+   "nombre": "Funky House",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 233,
+   "nombre": "Mellow Hip Hop",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 234,
+   "nombre": "Chillout",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 235,
+   "nombre": "Euro Trance",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 236,
+   "nombre": "Ibiza",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 237,
+   "nombre": "Swing House",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 238,
+   "nombre": "Clubdance",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 239,
+   "nombre": "Club Latin",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 240,
+   "nombre": "Garage 1",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 241,
+   "nombre": "Garage 2",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 242,
+   "nombre": "Techno Party",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 243,
+   "nombre": "UK Pop",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 244,
+   "nombre": "Hip Hop Groove",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 245,
+   "nombre": "Hip Shuffle",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 246,
+   "nombre": "Hip Hop Pop",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 247,
+   "nombre": "Modern Disco",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 248,
+   "nombre": "70s Disco",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 249,
+   "nombre": "Latin Disco",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 250,
+   "nombre": "Saturday Night",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 251,
+   "nombre": "Disco Hands",
+   "categoria": "Dance",
+   "soloConAcmp": false
+  },
+  {
+   "numero": 252,
+   "nombre": "Stride",
+   "categoria": "Pianista",
+   "soloConAcmp": true
+  },
+  {
+   "numero": 253,
+   "nombre": "Piano Swing",
+   "categoria": "Pianista",
+   "soloConAcmp": true
+  },
+  {
+   "numero": 254,
+   "nombre": "Piano Boogie",
+   "categoria": "Pianista",
+   "soloConAcmp": true
+  },
+  {
+   "numero": 255,
+   "nombre": "Arpeggio",
+   "categoria": "Pianista",
+   "soloConAcmp": true
+  },
+  {
+   "numero": 256,
+   "nombre": "Slow Rock",
+   "categoria": "Pianista",
+   "soloConAcmp": true
+  },
+  {
+   "numero": 257,
+   "nombre": "8Beat Piano Ballad",
+   "categoria": "Pianista",
+   "soloConAcmp": true
+  },
+  {
+   "numero": 258,
+   "nombre": "Habanera",
+   "categoria": "Pianista",
+   "soloConAcmp": true
+  },
+  {
+   "numero": 259,
+   "nombre": "6/8 Piano March",
+   "categoria": "Pianista",
+   "soloConAcmp": true
+  },
+  {
+   "numero": 260,
+   "nombre": "Piano Waltz",
+   "categoria": "Pianista",
+   "soloConAcmp": true
+  }
+ ]
+}

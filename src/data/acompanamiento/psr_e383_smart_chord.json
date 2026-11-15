@@ -1,0 +1,31 @@
+{
+ "fuente": "Yamaha PSR-E383 Reference Manual, pág. 36: 'Chords Produced When Smart Chord is Selected' (usa.yamaha.com, PSR-E383_reference_manual_En_B0_web.pdf).",
+ "comoUsar": "Con Fingering Type en Smart Chord (botón [FINGERING TYPE]) y la Style Key igual a la armadura del canto (botón [STYLE KEY], [+/YES]/[-/NO]), basta tocar UNA tecla (la fundamental) en la zona de acompañamiento, a la izquierda del punto de división (54, F#2). El teclado produce el acorde de la tabla.",
+ "nota1+5": "El manual indica que '1+5' se muestra igual que un acorde mayor: suena la fundamental y la quinta, sin tercera.",
+ "orden": ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
+ "armaduras": {
+  "FL7": { "mayor": "Cb", "menor": "Abm", "pantalla": "FL7 (7 bemoles)", "acordes": ["Cdim", "Dbm", "Ddim7", "Eb1+5", "E", "Fdim", "Gb7", "G", "Abm", "A", "Bbm7b5", "B"] },
+  "FL6": { "mayor": "Gb", "menor": "Ebm", "pantalla": "FL6 (6 bemoles)", "acordes": ["Cdim", "Db7", "D", "Ebm", "E", "Fm7b5", "Gb", "Gdim", "Abm", "Adim7", "Bb1+5", "B"] },
+  "FL5": { "mayor": "Db", "menor": "Bbm", "pantalla": "FL5 (5 bemoles)", "acordes": ["Cm7b5", "Db", "Ddim", "Ebm", "Edim7", "F1+5", "Gb", "Gdim", "Ab7", "A", "Bbm", "B"] },
+  "FL4": { "mayor": "Ab", "menor": "Fm", "pantalla": "FL4 (4 bemoles)", "acordes": ["C1+5", "Db", "Ddim", "Eb7", "E", "Fm", "Gb", "Gm7b5", "Ab", "Adim", "Bbm", "Bdim7"] },
+  "FL3": { "mayor": "Eb", "menor": "Cm", "pantalla": "FL3 (3 bemoles)", "acordes": ["Cm", "Db", "Dm7b5", "Eb", "Edim", "Fm", "F#dim7", "G1+5", "Ab", "Adim", "Bb7", "B"] },
+  "FL2": { "mayor": "Bb", "menor": "Gm", "pantalla": "FL2 (2 bemoles)", "acordes": ["Cm", "C#dim7", "D1+5", "Eb", "Edim", "F7", "Gb", "Gm", "Ab", "Am7b5", "Bb", "Bdim"] },
+  "FL1": { "mayor": "F", "menor": "Dm", "pantalla": "FL1 (1 bemol)", "acordes": ["C7", "Db", "Dm", "Eb", "Em7b5", "F", "F#dim", "Gm", "G#dim7", "A1+5", "Bb", "Bdim"] },
+  "SP0": { "mayor": "C", "menor": "Am", "pantalla": "SP0 (sin armadura)", "acordes": ["C", "C#dim", "Dm", "D#dim7", "E1+5", "F", "F#dim", "G7", "Ab", "Am", "Bb", "Bm7b5"] },
+  "SP1": { "mayor": "G", "menor": "Em", "pantalla": "SP1 (1 sostenido)", "acordes": ["C", "C#dim", "D7", "Eb", "Em", "F", "F#m7b5", "G", "G#dim", "Am", "A#dim7", "B1+5"] },
+  "SP2": { "mayor": "D", "menor": "Bm", "pantalla": "SP2 (2 sostenidos)", "acordes": ["C", "C#m7b5", "D", "D#dim", "Em", "Fdim7", "F#1+5", "G", "G#dim", "A7", "Bb", "Bm"] },
+  "SP3": { "mayor": "A", "menor": "F#m", "pantalla": "SP3 (3 sostenidos)", "acordes": ["Cdim7", "C#1+5", "D", "D#dim", "E7", "F", "F#m", "G", "G#m7b5", "A", "A#dim", "Bm"] },
+  "SP4": { "mayor": "E", "menor": "C#m", "pantalla": "SP4 (4 sostenidos)", "acordes": ["C", "C#m", "D", "D#m7b5", "E", "Fdim", "F#m", "Gdim7", "G#1+5", "A", "A#dim", "B7"] },
+  "SP5": { "mayor": "B", "menor": "G#m", "pantalla": "SP5 (5 sostenidos)", "acordes": ["Cdim", "C#m", "Ddim7", "D#1+5", "E", "Fdim", "F#7", "G", "G#m", "A", "A#m7b5", "B"] },
+  "SP6": { "mayor": "F#", "menor": "D#m", "pantalla": "SP6 (6 sostenidos)", "acordes": ["Cdim", "C#7", "D", "D#m", "E", "Fm7b5", "F#", "Gdim", "G#m", "Adim7", "A#1+5", "B"] },
+  "SP7": { "mayor": "C#", "menor": "A#m", "pantalla": "SP7 (7 sostenidos)", "acordes": ["Cm7b5", "C#", "Ddim", "D#m", "Edim7", "F1+5", "F#", "Gdim", "G#7", "A", "A#m", "B"] }
+ },
+ "multiFinger": {
+  "fuente": "Reference Manual, pág. 35: 'How to play Chords for Style Playback'.",
+  "mayor": "Solo la fundamental.",
+  "menor": "La fundamental + la tecla negra más cercana a su izquierda.",
+  "septima": "La fundamental + la tecla blanca más cercana a su izquierda.",
+  "menorSeptima": "La fundamental + las teclas blanca y negra más cercanas a su izquierda (tres teclas).",
+  "otros": "Para otros acordes toca todas sus notas en la zona de acompañamiento."
+ }
+}
