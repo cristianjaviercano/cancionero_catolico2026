@@ -12,7 +12,7 @@ import { notify, notifyError, askConfirm } from '../utils/feedback';
 import { parseSpanishDate, isDateId, getMassDateIso, getMassName, nextFreeDateId, isoToLocalDate } from '../utils/massDates';
 import { auth, db, googleProvider } from '../firebase';
 import { onAuthStateChanged, signInWithPopup } from 'firebase/auth';
-import { collection, doc, setDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, setDoc, deleteDoc, getDocs, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { DoorOpen, Heart, Sun, BookOpen, Sparkles, Gift, Bell, Flame, Wine, Music, Search, Users, Shield, Globe, Lock, Minus, CloudOff, LogIn, AlertCircle, RefreshCw } from 'lucide-react';
 
 
@@ -280,6 +280,8 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
 
   const [user, setUser] = useState(auth.currentUser);
   const [isMigrating, setIsMigrating] = useState(false);
+  // ¿Ya llegó desde la nube la lista de celebraciones de esta cuenta? Sin ella no se sabe qué IDs están ocupados
+  const [cloudMassesLoaded, setCloudMassesLoaded] = useState(false);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
@@ -308,14 +310,24 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
           const massKeys = Object.keys(parsed);
           if (massKeys.length > 0) {
             setIsMigrating(true);
-            Promise.all(
-              massKeys.map(async (name) => {
+            (async () => {
+              // Con el ID por fecha, en la cuenta puede haber OTRA celebración de ese mismo día guardada desde
+              // otro equipo: esa no se pisa; la de este equipo sube con el siguiente ID libre (…_2, _3).
+              const cloud = await getDocs(collection(db, 'users', user.uid, 'savedMasses'));
+              const takenIds = cloud.docs.map(d => d.id);
+              for (const name of massKeys) {
                 const data = parsed[name];
-                if (data) {
-                  await setDoc(doc(db, 'users', user.uid, 'savedMasses', massDocId(name)), data, { merge: true });
+                if (!data) continue;
+                let id = massDocId(name);
+                if (isDateId(id) && takenIds.includes(id)) {
+                  const inCloud = cloud.docs.find(d => d.id === id)?.data();
+                  const sameContent = JSON.stringify(inCloud?.playlist) === JSON.stringify(data.playlist);
+                  if (!sameContent) id = nextFreeDateId(id.slice(0, 10), takenIds);
                 }
-              })
-            ).then(() => {
+                await setDoc(doc(db, 'users', user.uid, 'savedMasses', id), data, { merge: true });
+                takenIds.push(id);
+              }
+            })().then(() => {
               localStorage.removeItem('savedMasses');
               setIsMigrating(false);
             }).catch((err) => {
@@ -330,17 +342,22 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
 
       // 2. Sincronizar en tiempo real desde Firestore
       const userMassesCol = collection(db, 'users', user.uid, 'savedMasses');
-      const unsubscribeSnapshot = onSnapshot(userMassesCol, (snapshot) => {
+      const unsubscribeSnapshot = onSnapshot(userMassesCol, { includeMetadataChanges: true }, (snapshot) => {
         const firestoreMasses: any = {};
         snapshot.forEach((doc) => {
           firestoreMasses[doc.id] = doc.data();
         });
         setSavedMasses(firestoreMasses);
+        // Solo cuenta como cargada cuando la respuesta viene del servidor (sin señal llega una lista vacía de la caché)
+        if (!snapshot.metadata.fromCache) setCloudMassesLoaded(true);
       }, (error) => {
         console.error("Error al escuchar misas de Firestore:", error);
       });
 
-      return () => unsubscribeSnapshot();
+      return () => {
+        unsubscribeSnapshot();
+        setCloudMassesLoaded(false);
+      };
     } else {
       // Cargar localmente si no está autenticado
       const saved = localStorage.getItem('savedMasses');
@@ -438,25 +455,30 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
     const dateLabel = formatLiturgicalDate(isoToLocalDate(dateIso));
     const sameName = (id: string) => getMassName(id, savedMasses[id]).trim().toLowerCase() === massName.toLowerCase();
 
-    // ¿Ya hay una celebración con ese nombre en esa fecha? Se reemplaza; si no, se crea con el siguiente ID libre del día
-    const existingId = Object.keys(savedMasses).find(id => isDateId(id) && id.slice(0, 10) === dateIso && sameName(id));
-    if (existingId && existingId !== loadedId) {
-      const confirmOverwrite = await askConfirm({
-        title: 'Ya existe esa celebración',
-        message: `"${massName}" ya está guardada el ${dateLabel}. ¿La reemplazas con los cambios actuales?`,
-        confirmLabel: 'Reemplazar',
-        danger: true,
-      });
-      if (!confirmOverwrite) return;
+    let existingId: string | undefined;
+    let targetId: string;
+    if (user && !cloudMassesLoaded) {
+      // Sin la lista de la nube (sin señal, o la app recién abierta) no se sabe qué IDs están ocupados.
+      // Nunca se guarda a ciegas sobre el ID del día: o es la misma celebración que está abierta, o va con un ID propio.
+      targetId = loadedId && isDateId(loadedId) && loadedId.slice(0, 10) === dateIso ? loadedId : `${dateIso}_${Date.now()}`;
+    } else {
+      // ¿Ya hay una celebración con ese nombre en esa fecha? Se reemplaza (preguntando); si no, se crea con el siguiente ID libre del día
+      existingId = Object.keys(savedMasses).find(id => isDateId(id) && id.slice(0, 10) === dateIso && sameName(id));
+      if (existingId && existingId !== loadedId) {
+        const confirmOverwrite = await askConfirm({
+          title: 'Ya existe esa celebración',
+          message: `"${massName}" ya está guardada el ${dateLabel}. ¿La reemplazas con los cambios actuales?`,
+          confirmLabel: 'Reemplazar',
+          danger: true,
+        });
+        if (!confirmOverwrite) return;
+      }
+      targetId = existingId ?? nextFreeDateId(dateIso, Object.keys(savedMasses));
     }
-    const targetId = existingId ?? nextFreeDateId(dateIso, Object.keys(savedMasses));
 
-    // Una celebración antigua (su ID era el nombre) pasa al ID por fecha al volver a guardarla
-    const legacyId = loadedId && loadedId !== targetId && !isDateId(loadedId) && savedMasses[loadedId]
-      && getMassDateIso(loadedId, savedMasses[loadedId]) === dateIso && sameName(loadedId)
-      ? loadedId
-      : null;
-    const previous = (savedMasses[existingId ?? legacyId ?? ''] ?? null) as { isPublic?: boolean } | null;
+    // Guardar nunca borra otra celebración. Una antigua (su ID era el nombre) que se vuelve a guardar
+    // queda además con su ID por fecha; la copia con el nombre viejo sigue ahí hasta que tú la elimines.
+    const previous = (existingId ? savedMasses[existingId] : null) as { isPublic?: boolean } | null;
     const keepPublic = !!user && !!previous?.isPublic;
 
     // Guardar la lista de reproducción junto con los metadatos de presentación
@@ -490,10 +512,6 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
             createdAt: serverTimestamp()
           });
         }
-        if (legacyId) {
-          await deleteDoc(doc(db, 'users', user.uid, 'savedMasses', legacyId));
-          await deleteDoc(doc(db, 'publicMasses', publicMassDocId(user.uid, legacyId))).catch(() => {});
-        }
         setLoadedId(targetId);
         notify(`Guardada en la nube · ${dateLabel} · ID ${targetId}`);
       } catch (error) {
@@ -502,7 +520,6 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
       }
     } else {
       const newSavedMasses = { ...savedMasses, [targetId]: newMassData as unknown as MassPart[] };
-      if (legacyId) delete newSavedMasses[legacyId];
       setSavedMasses(newSavedMasses);
       localStorage.setItem('savedMasses', JSON.stringify(newSavedMasses));
       setLoadedId(targetId);
@@ -585,6 +602,13 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
     const removed = savedMasses[name];
     if (!removed) return;
     const label = getMassName(name, removed);
+    const accepted = await askConfirm({
+      title: 'Eliminar la celebración',
+      message: `"${label}"${isDateId(name) ? ` (${name})` : ''} se quitará de tus guardadas.`,
+      confirmLabel: 'Eliminar',
+      danger: true,
+    });
+    if (!accepted) return;
     const wasLoaded = loadedId === name;
     if (wasLoaded) setLoadedId(null);
 
