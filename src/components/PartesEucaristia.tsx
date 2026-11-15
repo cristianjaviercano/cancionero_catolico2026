@@ -191,7 +191,7 @@ export function PartesEucaristia() {
           onClick={() => navigate('/secciones')}
           className="flex items-center gap-1.5 text-stone-500 hover:text-red-500 transition-colors text-sm font-semibold cursor-pointer"
         >
-          <ArrowLeft size={16} /> Volver a Secciones Extra
+          <ArrowLeft size={16} /> Volver a Todas las secciones
         </button>
       </div>
 

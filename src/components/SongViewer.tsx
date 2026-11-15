@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { parseSongContent, transposeChord, formatChord, getChordMidi, getChordNotes, transposeSongContent, detectSongKey } from '../utils/musicTheory';
 import { 
@@ -10,6 +11,7 @@ import { ChordPopover } from './ChordPopover';
 import { auth } from '../firebase';
 import { useSongs } from '../hooks/useSongs';
 import { globalAudio } from '../utils/audioEngine';
+import { askConfirm } from '../utils/feedback';
 
 const AccompanimentPanel = lazy(() =>
   import('./acompanamiento/AccompanimentPanel').then(m => ({ default: m.AccompanimentPanel }))
@@ -38,6 +40,9 @@ interface SongViewerProps {
   onFontSizeChange?: (size: number) => void;
   hidePracticeStudio?: boolean;
   sheetMusic?: string;
+  /** Modo ejecución: la barra de opciones (tono, letra, color, columnas) se dibuja en este contenedor
+      —el panel "Ajustes"— en vez de dentro de la tarjeta. Mientras sea null no se dibuja. */
+  toolbarTarget?: HTMLElement | null;
 }
 
 const MEDITATION_QUOTES = [
@@ -81,8 +86,10 @@ export function SongViewer({
   fontSize: controlledFontSize,
   onFontSizeChange,
   hidePracticeStudio = false,
-  sheetMusic
+  sheetMusic,
+  toolbarTarget
 }: SongViewerProps) {
+  const inPanel = toolbarTarget !== undefined;
   const [internalTranspose, setInternalTranspose] = useState(0);
   const transpose = controlledTranspose !== undefined ? controlledTranspose : internalTranspose;
   
@@ -279,7 +286,12 @@ export function SongViewer({
     const currentKey = key || detectSongKey(content) || '';
     const newKey = currentKey ? transposeChord(currentKey, transpose) : '';
     
-    if (window.confirm(`¿Deseas guardar permanentemente este tono (${transpose > 0 ? '+' : ''}${transpose} semitonos) en la canción? Así todo el coro verá los acordes que ensayaron.`)) {
+    const accepted = await askConfirm({
+      title: 'Guardar este tono',
+      message: `El canto quedará guardado ${transpose > 0 ? '+' : ''}${transpose} semitonos para todo el coro.`,
+      confirmLabel: 'Guardar tono',
+    });
+    if (accepted) {
       await saveSong({
         id,
         title,
@@ -379,94 +391,14 @@ export function SongViewer({
     }).join('\n');
   }, [lines, transpose, notation]);
 
-  return (
-    <div className="card" style={{ overflow: 'hidden', position: 'relative' }}>
-      {/* ── Header: Title + action buttons ── */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-3">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2.5 mb-1 flex-wrap">
-            {id && (
-              <span className="song-num-badge">
-                #{String(id).padStart(3, '0')}
-              </span>
-            )}
-            <h1 className="m-0 text-xl md:text-2xl" style={{ lineHeight: 1.3 }}>{title}</h1>
-            {type && <span className="badge">{type}</span>}
-            {userId && (
-              <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider ${isPublic ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 shadow-sm' : 'bg-amber-50 text-amber-600 border border-amber-200 shadow-sm'}`}>
-                {isPublic ? 'Público' : 'Privado'}
-              </span>
-            )}
-          </div>
-          {artist && <p className="text-secondary text-sm">{artist}</p>}
-          {author && <p className="text-stone-500 text-sm font-medium">Autor: {author}</p>}
-          {key && (
-            <p className="text-[11px] font-bold text-stone-400 uppercase tracking-wider mt-0.5">
-              🎵 Tono original: <span className="text-red-500">{key}</span>
-            </p>
-          )}
-        </div>
-
-        {/* Action icons row */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-          {/* Print & Share Button */}
-          <button 
-            className="btn btn-icon bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 shadow-sm transition-all"
-            onClick={() => setShowPrintModal(true)}
-            title="Imprimir / Guardar PDF / Compartir"
-          >
-            <Printer size={17} />
-          </button>
-
-          <button 
-            className="btn btn-icon bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 shadow-sm transition-all"
-            onClick={() => setShowPrintModal(true)}
-            title="Compartir canción"
-          >
-            <Share2 size={17} />
-          </button>
-
-          {externalLink && (
-            <a 
-              href={externalLink} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="btn btn-icon bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 shadow-sm transition-all"
-              title="Ver Demostración (Video/Audio)"
-            >
-              🎵
-            </a>
-          )}
-          {sheetMusic && id && (
-            <Link
-              to={`/partituras/${id}`}
-              className="btn btn-icon bg-stone-800 hover:bg-stone-900 border border-stone-700 text-white shadow-sm transition-all"
-              title="Ver Partitura (PDF)"
-            >
-              <FileText size={16} />
-            </Link>
-          )}
-          {onEdit && isEditable && (
-            <button className="btn btn-icon text-stone-500 hover:text-red-500 hover:bg-red-50" onClick={onEdit} title="Editar Canción">
-              <Edit3 size={18} />
-            </button>
-          )}
-          {onPlay && (
-            <button className="btn btn-icon text-stone-500 hover:text-emerald-500 hover:bg-emerald-50" onClick={onPlay} title="Tocar en Modo Ejecución">
-              <Play size={18} />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* ── Compact Toolbar ── */}
+  const toolbar = (
       <div 
-        className="flex flex-wrap items-center gap-2 mb-6 pb-5"
-        style={{ borderBottom: '1px solid #e7e5e4' }}
+        className={inPanel ? 'contents' : 'flex flex-wrap items-center gap-2 mb-6 pb-5'}
+        style={inPanel ? undefined : { borderBottom: '1px solid #e7e5e4' }}
       >
         {/* ⚙ Options button (mobile only) */}
         <button
-          className={`btn flex items-center gap-1.5 sm:hidden shadow-sm ${isOptionsOpen ? 'bg-stone-800 text-white border border-stone-700' : 'bg-stone-50 text-stone-700 border border-stone-200 hover:bg-stone-100'}`}
+          className={`btn items-center gap-1.5 shadow-sm ${inPanel ? 'hidden' : 'flex sm:hidden'} ${isOptionsOpen ? 'bg-stone-800 text-white border border-stone-700' : 'bg-stone-50 text-stone-700 border border-stone-200 hover:bg-stone-100'}`}
           onClick={() => setIsOptionsOpen(!isOptionsOpen)}
         >
           <Settings2 size={16} />
@@ -475,7 +407,7 @@ export function SongViewer({
         </button>
 
         {/* Controls — always visible on sm+, shown in dropdown on mobile */}
-        <div className={`${isOptionsOpen ? 'flex' : 'hidden'} sm:flex flex-wrap items-center gap-2 w-full sm:w-auto`}>
+        <div className={inPanel ? 'contents' : `${isOptionsOpen ? 'flex' : 'hidden'} sm:flex flex-wrap items-center gap-2 w-full sm:w-auto`}>
           {/* Transpose */}
           <div className="flex items-center gap-1.5 bg-stone-50 px-2 py-1.5 rounded-lg border border-stone-200 shadow-sm">
             <button className="btn btn-icon" style={{ padding: '4px' }} onClick={handleTransposeDown} title="Bajar">
@@ -577,6 +509,9 @@ export function SongViewer({
             >2 Col</button>
           </div>
 
+          {/* Scroll e impresión: fuera del modo ejecución (allí el scroll se maneja desde la barra inferior) */}
+          {!inPanel && (
+            <>
           {/* Autoscroll Controls */}
           <div className="flex items-center gap-1 bg-stone-50 px-2 py-1 rounded-lg border border-stone-200 shadow-sm text-xs">
             <button
@@ -621,12 +556,14 @@ export function SongViewer({
             <Printer size={14} className="text-red-500" />
             <span>Imprimir / Compartir</span>
           </button>
+            </>
+          )}
         </div>
 
         {/* Acompañamiento: teclado PSR-E383, guitarra, piano y partitura */}
         {uniqueChords.length > 0 && (
           <button
-            className={`btn flex items-center gap-2 shadow-sm transition-colors flex-shrink-0 ${hasStudio ? '' : 'ml-auto'} bg-stone-50 text-stone-700 border border-stone-200 hover:bg-stone-100`}
+            className={`btn flex items-center gap-2 shadow-sm transition-colors flex-shrink-0 ${hasStudio || inPanel ? '' : 'ml-auto'} bg-stone-50 text-stone-700 border border-stone-200 hover:bg-stone-100`}
             onClick={() => setIsAccompOpen(true)}
             title="Ritmo, estilo del teclado, rasgueo, tablatura y partitura"
           >
@@ -654,6 +591,90 @@ export function SongViewer({
           </button>
         )}
       </div>
+  );
+
+  return (
+    <div className="card" style={{ overflow: 'hidden', position: 'relative' }}>
+      {/* ── Header: Title + action buttons ── */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-3">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2.5 mb-1 flex-wrap">
+            {id && (
+              <span className="song-num-badge">
+                #{String(id).padStart(3, '0')}
+              </span>
+            )}
+            <h1 className="m-0 text-xl md:text-2xl" style={{ lineHeight: 1.3 }}>{title}</h1>
+            {type && <span className="badge">{type}</span>}
+            {userId && (
+              <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider ${isPublic ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 shadow-sm' : 'bg-amber-50 text-amber-600 border border-amber-200 shadow-sm'}`}>
+                {isPublic ? 'Público' : 'Privado'}
+              </span>
+            )}
+          </div>
+          {artist && <p className="text-secondary text-sm">{artist}</p>}
+          {author && <p className="text-stone-500 text-sm font-medium">Autor: {author}</p>}
+          {key && (
+            <p className="text-[11px] font-bold text-stone-400 uppercase tracking-wider mt-0.5">
+              🎵 Tono original: <span className="text-red-500">{key}</span>
+            </p>
+          )}
+        </div>
+
+        {/* Action icons row */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Print & Share Button */}
+          <button 
+            className="btn btn-icon bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 shadow-sm transition-all"
+            onClick={() => setShowPrintModal(true)}
+            title="Imprimir / Guardar PDF / Compartir"
+          >
+            <Printer size={17} />
+          </button>
+
+          <button 
+            className="btn btn-icon bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 shadow-sm transition-all"
+            onClick={() => setShowPrintModal(true)}
+            title="Compartir canción"
+          >
+            <Share2 size={17} />
+          </button>
+
+          {externalLink && (
+            <a 
+              href={externalLink} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn btn-icon bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 shadow-sm transition-all"
+              title="Ver Demostración (Video/Audio)"
+            >
+              🎵
+            </a>
+          )}
+          {sheetMusic && id && (
+            <Link
+              to={`/partituras/${id}`}
+              className="btn btn-icon bg-stone-800 hover:bg-stone-900 border border-stone-700 text-white shadow-sm transition-all"
+              title="Ver Partitura (PDF)"
+            >
+              <FileText size={16} />
+            </Link>
+          )}
+          {onEdit && isEditable && (
+            <button className="btn btn-icon text-stone-500 hover:text-red-500 hover:bg-red-50" onClick={onEdit} title="Editar Canción">
+              <Edit3 size={18} />
+            </button>
+          )}
+          {onPlay && (
+            <button className="btn btn-icon text-stone-500 hover:text-emerald-500 hover:bg-emerald-50" onClick={onPlay} title="Tocar en Modo Ejecución">
+              <Play size={18} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* ── Barra de opciones (en modo ejecución va al panel Ajustes) ── */}
+      {inPanel ? (toolbarTarget ? createPortal(toolbar, toolbarTarget) : null) : toolbar}
 
       {/* ── Saved Key Toast ── */}
       {savedKeyToast && (

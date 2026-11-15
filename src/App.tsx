@@ -11,6 +11,8 @@ import { useLiveSession } from './hooks/useLiveSession';
 import { LiveSessionModal } from './components/LiveSessionModal';
 
 import { Sidebar } from './components/Sidebar';
+import { FeedbackHost } from './components/FeedbackHost';
+import { Devociones } from './components/Devociones';
 
 // Pantallas que se cargan al abrirlas (el inicio y el repertorio van en el archivo principal)
 const MassBuilder = lazy(() => import('./components/MassBuilder').then(m => ({ default: m.MassBuilder })));
@@ -338,6 +340,7 @@ function MainApp({
           <SheetMusicViewer chordNotation={chordNotation} />
         </div>
       } />
+      <Route path="/devociones" element={<div className="animate-in fade-in slide-in-from-bottom-4 duration-300"><Devociones /></div>} />
       <Route path="/secciones" element={
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
           <Secciones />
@@ -368,6 +371,14 @@ function MainApp({
               setSongToEdit(null);
             }} 
           />
+        </div>
+      } />
+      {/* Dirección que no existe: antes quedaba la pantalla en blanco */}
+      <Route path="*" element={
+        <div className="card text-center animate-in fade-in duration-300" style={{ maxWidth: '32rem', margin: '3rem auto' }}>
+          <h2 className="m-0">Esta página no existe</h2>
+          <p className="text-stone-500 text-sm" style={{ margin: '0.5rem 0 1.25rem' }}>Puede que el enlace haya cambiado.</p>
+          <Link to="/" className="btn btn-primary" style={{ textDecoration: 'none' }}>Ir al inicio</Link>
         </div>
       } />
     </Routes>
@@ -467,6 +478,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <FeedbackHost />
       <AppShell
         songToEdit={songToEdit}
         setSongToEdit={setSongToEdit}

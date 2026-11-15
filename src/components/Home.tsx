@@ -201,7 +201,7 @@ export function Home() {
         </div>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-          <Link to="/partes-misa" style={{ 
+          <Link to="/partes-eucaristia" style={{ 
             backgroundColor: 'var(--surface-highlight)', 
             color: 'var(--text-primary)', 
             padding: '0.5rem 0.875rem', 
@@ -215,7 +215,7 @@ export function Home() {
             transition: 'background-color 0.15s ease'
           }}>
             <Layers size={14} style={{ color: 'var(--accent-color)' }} />
-            Mysterium Fidei <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Partes Misa</span>
+            Partes de la Misa <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Mysterium Fidei</span>
           </Link>
 
           <Link to="/calendario" style={{ 
@@ -232,7 +232,7 @@ export function Home() {
             transition: 'background-color 0.15s ease'
           }}>
             <Calendar size={14} style={{ color: 'var(--accent-color)' }} />
-            Tempora Sacra <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Calendario</span>
+            Calendario <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Tempora Sacra</span>
           </Link>
 
           <Link to="/lecturas" style={{ 
@@ -249,7 +249,7 @@ export function Home() {
             transition: 'background-color 0.15s ease'
           }}>
             <ScrollText size={14} style={{ color: 'var(--accent-color)' }} />
-            Verbum Domini <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Lecturas</span>
+            Lecturas <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Verbum Domini</span>
           </Link>
 
           <Link to="/liturgia" style={{ 
@@ -266,7 +266,7 @@ export function Home() {
             transition: 'background-color 0.15s ease'
           }}>
             <BookOpen size={14} style={{ color: 'var(--accent-color)' }} />
-            Officium Divinum <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Horas</span>
+            Liturgia de las Horas <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Officium Divinum</span>
           </Link>
 
           <Link to="/sanjose" style={{ 
@@ -283,7 +283,7 @@ export function Home() {
             transition: 'background-color 0.15s ease'
           }}>
             <Shield size={14} style={{ color: 'var(--accent-color)' }} />
-            Vir Fidelis <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• San José</span>
+            San José <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Vir Fidelis</span>
           </Link>
 
           <Link to="/acordes" style={{ 
@@ -300,7 +300,7 @@ export function Home() {
             transition: 'background-color 0.15s ease'
           }}>
             <Music size={14} style={{ color: 'var(--accent-color)' }} />
-            Harmonia Sacra <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Acordes</span>
+            Acordes <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Harmonia Sacra</span>
           </Link>
 
           <Link to="/partituras" style={{ 
@@ -317,7 +317,7 @@ export function Home() {
             transition: 'background-color 0.15s ease'
           }}>
             <Scroll size={14} style={{ color: 'var(--accent-color)' }} />
-            Codex Notarum <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Partituras</span>
+            Partituras <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>• Codex Notarum</span>
           </Link>
         </div>
       </div>

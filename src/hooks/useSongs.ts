@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
+import { notifyError } from '../utils/feedback';
 
 export interface Song {
   id: string;
@@ -145,7 +146,7 @@ export function useSongs() {
         }
       } catch (error) {
         console.error("Error al guardar canción en Firestore:", error);
-        alert("Error al guardar en la nube. Inténtalo de nuevo.");
+        notifyError("No se pudo guardar el canto en la nube. Inténtalo de nuevo.");
       }
     } else {
       const custom = localStorage.getItem('customSongs');
@@ -170,7 +171,7 @@ export function useSongs() {
         await deleteDoc(doc(db, 'publicSongs', id));
       } catch (error) {
         console.error("Error al eliminar canción en Firestore:", error);
-        alert("Error al eliminar de la nube. Inténtalo de nuevo.");
+        notifyError("No se pudo eliminar el canto de la nube. Inténtalo de nuevo.");
       }
     } else {
       const custom = localStorage.getItem('customSongs');

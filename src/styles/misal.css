@@ -76,6 +76,9 @@ h1, h2, h3 {
 .btn-primary { background-color: var(--accent-color); color: #fff; border-color: transparent; box-shadow: none; }
 .btn-primary:hover { background-color: var(--accent-hover); color: #fff; box-shadow: none; }
 body.stage-mode .btn-primary, body.stage-mode .btn-primary:hover { color: #1c1917; }
+/* Confirmar una acción que borra o reemplaza */
+.btn-primary.feedback-danger, body.stage-mode .btn-primary.feedback-danger { background-color: #b91c1c; color: #fff; }
+.btn-primary.feedback-danger:hover, body.stage-mode .btn-primary.feedback-danger:hover { background-color: #991b1b; color: #fff; }
 
 /* ── Cantos: letra en serif de lectura y acordes en rojo rúbrica ── */
 .lyric { font-family: var(--font-text); }

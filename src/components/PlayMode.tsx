@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { ChevronLeft, ChevronRight, ListMusic, X, CheckCircle2, Play, Square, Plus, Minus, Volume2, VolumeX, SkipForward, Music, Sliders, ChevronUp, ChevronDown, ArrowLeft, Radio } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ListMusic, X, CheckCircle2, Play, Square, Plus, Minus, Volume2, VolumeX, SkipForward, Music, Sliders, ChevronUp, ChevronDown, ArrowLeft, Radio, Pause } from 'lucide-react';
 import { SongViewer } from './SongViewer';
 import { globalAudio } from '../utils/audioEngine';
 import { ChordDiagram } from './ChordDiagram';
@@ -58,6 +58,8 @@ export function PlayMode({ playlist: propPlaylist, onExit, chordNotation, liveSe
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isArrangerOpen, setIsArrangerOpen] = useState(false);
   const [isChordsDrawerOpen, setIsChordsDrawerOpen] = useState(false);
+  // Contenedor del panel "Ajustes" donde el visor dibuja tono, letra, color y columnas
+  const [songToolbarEl, setSongToolbarEl] = useState<HTMLDivElement | null>(null);
 
   const [isScrollActive, setIsScrollActive] = useState(true);
   const [scrollSpeedMultiplier, setScrollSpeedMultiplier] = useState<number>(() => {
@@ -277,6 +279,14 @@ export function PlayMode({ playlist: propPlaylist, onExit, chordNotation, liveSe
     };
   }, [isScrollActive, scrollSpeedMultiplier]);
 
+  const toggleScroll = () => {
+    const next = !isScrollActive;
+    setIsScrollActive(next);
+    if (liveSession?.isHost && liveSession.sessionCode) {
+      liveSession.onUpdateLiveState({ isScrolling: next });
+    }
+  };
+
   const handleScroll = () => {
     if (scrollContainerRef.current) {
       const currentScrollTop = scrollContainerRef.current.scrollTop;
@@ -491,7 +501,7 @@ export function PlayMode({ playlist: propPlaylist, onExit, chordNotation, liveSe
       
       {/* Stage Top Bar */}
       <div className="h-16 border-b border-slate-800 bg-slate-900 flex items-center justify-between px-4 shrink-0 shadow-md">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           {/* Back to builder button */}
           <button 
             className="btn btn-icon bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700"
@@ -501,17 +511,17 @@ export function PlayMode({ playlist: propPlaylist, onExit, chordNotation, liveSe
           >
             <ArrowLeft size={20} />
           </button>
-          <div>
-            <h1 className="font-bold text-base sm:text-lg text-slate-100 truncate max-w-[200px] sm:max-w-xs leading-tight">
+          <div className="min-w-0">
+            <h1 className="font-bold text-base sm:text-lg text-slate-100 truncate leading-tight">
               Modo Acompañamiento
             </h1>
-            <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider">
+            <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider truncate">
               {currentSong?.partAssigned} • {currentIndex + 1} de {playlist.length}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {liveSession && (
             <button
               type="button"
@@ -533,63 +543,6 @@ export function PlayMode({ playlist: propPlaylist, onExit, chordNotation, liveSe
               </span>
             </button>
           )}
-
-          {/* Selector de Cejilla/Capo Personal para guitarristas en vivo */}
-          <label
-            className="hidden sm:flex items-center gap-1 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-[11px] text-slate-300"
-            title="Si pones cejilla (Capo) en tu guitarra, ajusta el traste aquí para ver tus posturas relativas al tono real del director"
-          >
-            <span className="text-slate-400 font-semibold">Capo:</span>
-            <select
-              value={localCapo}
-              onChange={(e) => setLocalCapo(Number(e.target.value))}
-              className="bg-transparent text-amber-400 font-bold focus:outline-none cursor-pointer"
-            >
-              {[0, 1, 2, 3, 4, 5, 6, 7].map((c) => (
-                <option key={c} value={c} className="bg-slate-900 text-slate-100">
-                  {c === 0 ? 'Sin' : `${c}°`}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <button 
-            onClick={() => {
-              const next = !isScrollActive;
-              setIsScrollActive(next);
-              if (liveSession?.isHost && liveSession.sessionCode) {
-                liveSession.onUpdateLiveState({ isScrolling: next });
-              }
-            }}
-            className={`btn transition-colors flex items-center gap-2 border px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer
-              ${isScrollActive 
-                ? 'bg-emerald-950/40 hover:bg-emerald-900/40 text-emerald-400 border-emerald-900/60' 
-                : 'bg-slate-800 hover:bg-slate-750 text-slate-400 border-slate-700'}`}
-          >
-            <div className={`w-2 h-2 rounded-full ${isScrollActive ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`} />
-            Scroll On/Off
-          </button>
-
-          {/* Speed Stepper */}
-          <div className="flex items-center gap-0.5 bg-slate-900 border border-slate-700 rounded-lg p-0.5 text-xs">
-            <button
-              onClick={() => setScrollSpeedMultiplier(s => Math.max(0.25, Number((s - 0.25).toFixed(2))))}
-              className="p-1 hover:bg-slate-800 text-slate-400 hover:text-white rounded cursor-pointer transition-colors"
-              title="Disminuir velocidad de scroll"
-            >
-              <Minus size={13} />
-            </button>
-            <span className="font-mono text-emerald-400 font-bold px-1 min-w-[32px] text-center text-[11px]">
-              {scrollSpeedMultiplier}x
-            </span>
-            <button
-              onClick={() => setScrollSpeedMultiplier(s => Math.min(3.0, Number((s + 0.25).toFixed(2))))}
-              className="p-1 hover:bg-slate-800 text-slate-400 hover:text-white rounded cursor-pointer transition-colors"
-              title="Aumentar velocidad de scroll"
-            >
-              <Plus size={13} />
-            </button>
-          </div>
 
           <div className="hidden md:flex items-center gap-2 bg-slate-950/80 px-3 py-1.5 rounded-lg border border-slate-800 text-xs">
             <span className="text-slate-500 uppercase font-semibold">Estado:</span>
@@ -635,6 +588,7 @@ export function PlayMode({ playlist: propPlaylist, onExit, chordNotation, liveSe
                   fontSize={currentSongState.fontSize}
                   onFontSizeChange={handleFontSizeChange}
                   hidePracticeStudio={true} // Hides the studio from sheet page
+                  toolbarTarget={songToolbarEl}
                   sheetMusic={currentSong.sheetMusic}
                 />
               )}
@@ -778,19 +732,68 @@ export function PlayMode({ playlist: propPlaylist, onExit, chordNotation, liveSe
       {/* -------------------- ARRANGER DASHBOARD & CONTROLS -------------------- */}
       <div className="shrink-0 flex flex-col play-dashboard border-t border-slate-800 bg-slate-900 px-4 py-3 md:px-6">
         
-        {/* Collapsible Panel 1: Arranger Beat Deck */}
+        {/* Panel plegable "Ajustes": opciones del canto + ritmo */}
         <div 
           style={{
-            maxHeight: isArrangerOpen ? '200px' : '0px',
+            maxHeight: isArrangerOpen ? 'min(60vh, 460px)' : '0px',
             opacity: isArrangerOpen ? 1 : 0,
             marginBottom: isArrangerOpen ? '0.75rem' : '0px',
             paddingBottom: isArrangerOpen ? '0.75rem' : '0px',
             borderBottom: isArrangerOpen ? '1px solid #1e293b' : 'none',
-            overflow: 'hidden',
+            overflowX: 'hidden',
+            overflowY: isArrangerOpen ? 'auto' : 'hidden',
             transition: 'all 300ms ease-in-out',
             pointerEvents: isArrangerOpen ? 'auto' : 'none'
           }}
         >
+          {/* Ajustes del canto: tono, letra, color y columnas los dibuja aquí el visor (SongViewer) */}
+          <div className="play-settings-paper">
+            <div ref={setSongToolbarEl} className="contents" />
+
+            <label
+              className="flex items-center gap-1.5 bg-stone-50 px-2 py-1.5 rounded-lg border border-stone-200 shadow-sm"
+              title="Si pones cejilla (capo) en tu guitarra, elige el traste para ver tus posturas respecto al tono real"
+            >
+              <div className="flex flex-col items-center min-w-[3rem]">
+                <span className="text-[9px] font-bold text-stone-400 uppercase">Capo</span>
+                <select
+                  value={localCapo}
+                  onChange={(e) => setLocalCapo(Number(e.target.value))}
+                  className="bg-transparent font-bold text-stone-800 text-sm focus:outline-none cursor-pointer"
+                >
+                  {[0, 1, 2, 3, 4, 5, 6, 7].map((c) => (
+                    <option key={c} value={c}>{c === 0 ? 'Sin' : `${c}°`}</option>
+                  ))}
+                </select>
+              </div>
+            </label>
+
+            <div className="flex items-center gap-1.5 bg-stone-50 px-2 py-1.5 rounded-lg border border-stone-200 shadow-sm">
+              <button
+                className="btn btn-icon"
+                style={{ padding: '4px' }}
+                onClick={() => setScrollSpeedMultiplier(s => Math.max(0.25, Number((s - 0.25).toFixed(2))))}
+                title="Scroll más lento"
+                aria-label="Scroll más lento"
+              >
+                <Minus size={15} />
+              </button>
+              <div className="flex flex-col items-center min-w-[3.5rem]">
+                <span className="text-[9px] font-bold text-stone-400 uppercase">Velocidad</span>
+                <span className="font-mono font-bold text-stone-800 text-sm">{scrollSpeedMultiplier}x</span>
+              </div>
+              <button
+                className="btn btn-icon"
+                style={{ padding: '4px' }}
+                onClick={() => setScrollSpeedMultiplier(s => Math.min(3.0, Number((s + 0.25).toFixed(2))))}
+                title="Scroll más rápido"
+                aria-label="Scroll más rápido"
+              >
+                <Plus size={15} />
+              </button>
+            </div>
+          </div>
+
           <div className="flex flex-wrap gap-6 items-stretch justify-between">
             
             {/* Section A: Metronome & Tempo Control */}
@@ -1017,6 +1020,21 @@ export function PlayMode({ playlist: propPlaylist, onExit, chordNotation, liveSe
             <ListMusic size={14} /> <span className="hidden md:inline">Cantos</span>
           </button>
 
+          {/* Scroll automático: pausar o seguir */}
+          <button
+            onClick={toggleScroll}
+            aria-pressed={isScrollActive}
+            aria-label={isScrollActive ? 'Pausar el scroll automático' : 'Iniciar el scroll automático'}
+            title={isScrollActive ? 'Pausar el scroll automático' : 'Iniciar el scroll automático'}
+            className={`px-3 py-3 border rounded-xl flex items-center gap-1 text-xs font-bold uppercase transition-colors shrink-0 cursor-pointer
+              ${isScrollActive
+                ? 'bg-emerald-950/40 hover:bg-emerald-900/40 text-emerald-400 border-emerald-900/60'
+                : 'bg-slate-800 hover:bg-slate-750 text-slate-350 border-slate-700 hover:text-slate-100'}`}
+          >
+            {isScrollActive ? <Pause size={14} /> : <Play size={14} />}
+            <span className="hidden sm:inline">Scroll</span>
+          </button>
+
           {/* Toggle button to expand/collapse Chords Drawer */}
           <button 
             onClick={() => { setIsChordsDrawerOpen(!isChordsDrawerOpen); setIsSidebarOpen(false); }}
@@ -1039,11 +1057,12 @@ export function PlayMode({ playlist: propPlaylist, onExit, chordNotation, liveSe
               ${isArrangerOpen 
                 ? 'bg-red-600 border-red-500 text-white shadow-md' 
                 : 'bg-slate-800 hover:bg-slate-750 text-slate-350 border-slate-700 hover:text-slate-100'}`}
-            title="Ajustes de acompañamiento y ritmo"
+            title="Ajustes: tono, letra, capo, velocidad y ritmo"
+            aria-expanded={isArrangerOpen}
             style={{ backgroundColor: isArrangerOpen ? '#dc2626' : undefined, borderColor: isArrangerOpen ? '#ef4444' : undefined }}
           >
             <Sliders size={14} />
-            <span className="hidden sm:inline">Ritmo</span>
+            <span className="hidden sm:inline">Ajustes</span>
             {isArrangerOpen ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
           </button>
 

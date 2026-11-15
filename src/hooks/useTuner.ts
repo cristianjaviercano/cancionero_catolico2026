@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { YIN } from 'pitchfinder';
+import { notifyError } from '../utils/feedback';
 
 export interface TunerState {
   note: string;
@@ -79,7 +80,7 @@ export function useTuner() {
       setState(prev => ({ ...prev, isActive: true }));
     } catch (err) {
       console.error("Error al acceder al micrófono:", err);
-      alert("No se pudo acceder al micrófono. Por favor revisa los permisos del navegador.");
+      notifyError("No se pudo acceder al micrófono. Revisa los permisos del navegador.");
     }
   };
 

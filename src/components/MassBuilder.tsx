@@ -8,6 +8,7 @@ import { SectionLayout } from './SectionLayout';
 import { LiturgicalCalendarPicker, formatLiturgicalDate } from './LiturgicalCalendarPicker';
 import { SavedMassesCalendar } from './SavedMassesCalendar';
 import { getLiturgicalDay, todayIso } from '../utils/liturgicalCalendar';
+import { notify, notifyError, askConfirm } from '../utils/feedback';
 import { parseSpanishDate, isDateId, getMassDateIso, getMassName, nextFreeDateId, isoToLocalDate } from '../utils/massDates';
 import { auth, db, googleProvider } from '../firebase';
 import { onAuthStateChanged, signInWithPopup } from 'firebase/auth';
@@ -247,8 +248,14 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
     localStorage.setItem('massBuilderDraft', JSON.stringify(draftData));
   }, [playlist, saveName, loadedId, printTitle, printDate, printReason, printGroup, printLayout, printTarget, printQuote, printChords]);
 
-  const handleClearDraft = () => {
-    if (!window.confirm('¿Estás seguro de querer limpiar todo el borrador actual y empezar de cero?')) return;
+  const handleClearDraft = async () => {
+    const accepted = await askConfirm({
+      title: 'Empezar una celebración nueva',
+      message: 'Se limpia lo que tienes armado ahora. Las celebraciones guardadas no se tocan.',
+      confirmLabel: 'Empezar de cero',
+      danger: true,
+    });
+    if (!accepted) return;
     setPlaylist(DEFAULT_MASS_PARTS.map((part, idx) => ({
       id: `default-part-${idx}`,
       name: part,
@@ -286,7 +293,7 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
       await signInWithPopup(auth, googleProvider);
     } catch (error) {
       console.error('Error al iniciar sesión con Google:', error);
-      alert('No se pudo iniciar sesión con Google. Por favor, intenta de nuevo.');
+      notifyError('No se pudo iniciar sesión con Google. Intenta de nuevo.');
     }
   };
 
@@ -434,7 +441,12 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
     // ¿Ya hay una celebración con ese nombre en esa fecha? Se reemplaza; si no, se crea con el siguiente ID libre del día
     const existingId = Object.keys(savedMasses).find(id => isDateId(id) && id.slice(0, 10) === dateIso && sameName(id));
     if (existingId && existingId !== loadedId) {
-      const confirmOverwrite = window.confirm(`Ya existe "${massName}" el ${dateLabel}. ¿Deseas reemplazarla con los cambios actuales?`);
+      const confirmOverwrite = await askConfirm({
+        title: 'Ya existe esa celebración',
+        message: `"${massName}" ya está guardada el ${dateLabel}. ¿La reemplazas con los cambios actuales?`,
+        confirmLabel: 'Reemplazar',
+        danger: true,
+      });
       if (!confirmOverwrite) return;
     }
     const targetId = existingId ?? nextFreeDateId(dateIso, Object.keys(savedMasses));
@@ -483,10 +495,10 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
           await deleteDoc(doc(db, 'publicMasses', publicMassDocId(user.uid, legacyId))).catch(() => {});
         }
         setLoadedId(targetId);
-        alert(`¡Celebración guardada en la nube!\n\n${dateLabel}\nID: ${targetId}`);
+        notify(`Guardada en la nube · ${dateLabel} · ID ${targetId}`);
       } catch (error) {
         console.error("Error al guardar celebración en Firestore:", error);
-        alert("Error al guardar en la nube. Inténtalo de nuevo.");
+        notifyError("No se pudo guardar en la nube. Inténtalo de nuevo.");
       }
     } else {
       const newSavedMasses = { ...savedMasses, [targetId]: newMassData as unknown as MassPart[] };
@@ -494,18 +506,13 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
       setSavedMasses(newSavedMasses);
       localStorage.setItem('savedMasses', JSON.stringify(newSavedMasses));
       setLoadedId(targetId);
-      const shouldLogin = window.confirm(
-        `¡Celebración guardada en este equipo!\n${dateLabel} · ID: ${targetId}\n\n` +
-        '⚠️ ATENCIÓN: Como no has iniciado sesión con Google, esta celebración se guardó únicamente en este navegador y NO aparecerá en tus otros dispositivos (iPad, celular).\n\n' +
-        '¿Deseas iniciar sesión con Google ahora para sincronizarla en la nube?'
-      );
-      if (shouldLogin) {
-        try {
-          await signInWithPopup(auth, googleProvider);
-        } catch (e) {
-          console.error('Error al iniciar sesión:', e);
-        }
-      }
+      // Sin sesión se guarda solo en este equipo: se avisa sin interrumpir, con el acceso a mano
+      notify(`Guardada solo en este equipo · ID ${targetId}. Inicia sesión para verla en tus otros dispositivos.`, {
+        kind: 'info',
+        actionLabel: 'Iniciar sesión',
+        onAction: () => { void handleQuickLogin(); },
+        duration: 9000,
+      });
     }
   };
 
@@ -575,31 +582,68 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
 
   const deleteSavedMass = async (name: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    const label = isDateId(name) ? `${getMassName(name, savedMasses[name])} (${name})` : name;
-    if (!window.confirm(`¿Estás seguro de eliminar la celebración "${label}"?`)) return;
-    if (loadedId === name) setLoadedId(null);
-    
+    const removed = savedMasses[name];
+    if (!removed) return;
+    const label = getMassName(name, removed);
+    const wasLoaded = loadedId === name;
+    if (wasLoaded) setLoadedId(null);
+
     if (user) {
+      const uid = user.uid;
+      const publicMassId = publicMassDocId(uid, name);
+      const removedPublic = publicMasses[publicMassId];
       try {
-        await deleteDoc(doc(db, 'users', user.uid, 'savedMasses', name));
+        await deleteDoc(doc(db, 'users', uid, 'savedMasses', name));
         // Remove from public as well if it existed
-        const publicMassId = publicMassDocId(user.uid, name);
         await deleteDoc(doc(db, 'publicMasses', publicMassId)).catch(() => {});
       } catch (error) {
         console.error("Error deleting from Firestore", error);
+        notifyError('No se pudo eliminar la celebración. Inténtalo de nuevo.');
+        return;
       }
+      notify(`Se eliminó "${label}"`, {
+        kind: 'info',
+        actionLabel: 'Deshacer',
+        onAction: async () => {
+          try {
+            await setDoc(doc(db, 'users', uid, 'savedMasses', name), removed as unknown as Record<string, unknown>);
+            if (removedPublic) await setDoc(doc(db, 'publicMasses', publicMassId), removedPublic as Record<string, unknown>);
+            if (wasLoaded) setLoadedId(name);
+            notify(`Se recuperó "${label}"`);
+          } catch (error) {
+            console.error('Error al deshacer la eliminación', error);
+            notifyError('No se pudo recuperar la celebración.');
+          }
+        },
+      });
     } else {
       const newSaved = { ...savedMasses };
       delete newSaved[name];
       setSavedMasses(newSaved);
       localStorage.setItem('savedMasses', JSON.stringify(newSaved));
+      notify(`Se eliminó "${label}"`, {
+        kind: 'info',
+        actionLabel: 'Deshacer',
+        onAction: () => {
+          setSavedMasses(prev => {
+            const restored = { ...prev, [name]: removed };
+            localStorage.setItem('savedMasses', JSON.stringify(restored));
+            return restored;
+          });
+          if (wasLoaded) setLoadedId(name);
+        },
+      });
     }
   };
 
   const togglePublicStatus = async (massName: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) {
-      alert("Debes iniciar sesión para publicar en la comunidad.");
+      notify('Para publicar en la comunidad necesitas iniciar sesión.', {
+        kind: 'info',
+        actionLabel: 'Iniciar sesión',
+        onAction: () => { void handleQuickLogin(); },
+      });
       return;
     }
     const currentData = savedMasses[massName] as any;
@@ -630,7 +674,7 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
       }
     } catch (error) {
       console.error("Error toggling public status:", error);
-      alert("Hubo un error al cambiar el estado público.");
+      notifyError("No se pudo cambiar la publicación. Inténtalo de nuevo.");
     }
   };
 
@@ -1465,9 +1509,16 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
                         return (
                           <>
                             <button className="btn btn-icon text-stone-400 hover:text-red-500 p-1.5" onClick={() => onEditSong?.(part.song!)} title="Editar esta canción"><Edit3 size={14} /></button>
-                            <button className="btn btn-icon text-stone-400 hover:text-red-500 p-1.5" onClick={() => {
-                              if (window.confirm('¿Seguro que deseas eliminar esta canción de tu base de datos?')) {
-                                onDeleteSong?.(part.song!.id);
+                            <button className="btn btn-icon text-stone-400 hover:text-red-500 p-1.5" onClick={async () => {
+                              const song = part.song!;
+                              const accepted = await askConfirm({
+                                title: 'Eliminar el canto',
+                                message: `"${song.title}" se borra de tu repertorio, no solo de esta celebración.`,
+                                confirmLabel: 'Eliminar canto',
+                                danger: true,
+                              });
+                              if (accepted) {
+                                onDeleteSong?.(song.id);
                                 removeSongFromPart(part.id);
                               }
                             }} title="Eliminar del sistema"><Trash2 size={14} /></button>

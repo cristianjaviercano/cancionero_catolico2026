@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { signInWithPopup, signOut, onAuthStateChanged, type User } from 'firebase/auth';
+import { notifyError } from '../utils/feedback';
 import { LogIn, LogOut, User as UserIcon, Loader2 } from 'lucide-react';
 import { auth, googleProvider } from '../firebase';
 
@@ -35,7 +36,7 @@ export function AuthButton() {
       await signInWithPopup(auth, googleProvider);
     } catch (error) {
       console.error('Error al iniciar sesión con Google:', error);
-      alert('No se pudo iniciar sesión con Google. Por favor, intenta de nuevo.');
+      notifyError('No se pudo iniciar sesión con Google. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }

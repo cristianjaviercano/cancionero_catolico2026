@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home as HomeIcon, Book, ListMusic, Calendar, BookOpen, 
-  Plus, Mic, FolderOpen, Music, HelpCircle, Compass, FileText, X, Sparkles, Flame, Shield, ScrollText, Award
+  Plus, Mic, FolderOpen, Music, HelpCircle, Compass, FileText, X, Heart, ScrollText, Award
 } from 'lucide-react';
 import type { Song } from '../hooks/useSongs';
 
@@ -12,10 +12,63 @@ interface SidebarProps {
   setSongToEdit: (song: Song | null) => void;
 }
 
+interface NavItem {
+  to: string;
+  icon: React.ElementType;
+  /** Nombre en español: es lo que se lee primero */
+  title: string;
+  /** Nombre en latín o aclaración, en pequeño */
+  subtitle: string;
+  /** Otras rutas que también marcan esta entrada como activa */
+  also?: string[];
+}
+
+// Una sola lista para el riel de escritorio y el cajón del celular
+const NAV_GROUPS: { label: string | null; items: NavItem[] }[] = [
+  {
+    label: null,
+    items: [
+      { to: '/', icon: HomeIcon, title: 'Inicio', subtitle: 'Atrium' },
+      { to: '/repertorio', icon: Book, title: 'Repertorio', subtitle: 'Sefer Shirim' },
+      { to: '/build', icon: ListMusic, title: 'Armar Eucaristía', subtitle: 'Ordo Missae' },
+    ],
+  },
+  {
+    label: 'Liturgia y oración',
+    items: [
+      { to: '/lecturas', icon: ScrollText, title: 'Lecturas del día', subtitle: 'Verbum Domini' },
+      { to: '/liturgia', icon: BookOpen, title: 'Liturgia de las Horas', subtitle: 'Officium Divinum' },
+      { to: '/calendario', icon: Calendar, title: 'Calendario litúrgico', subtitle: 'Tempora Sacra' },
+      { to: '/partes-eucaristia', icon: Compass, title: 'Partes de la Eucaristía', subtitle: 'Mysterium Fidei' },
+      { to: '/devociones', icon: Heart, title: 'Devociones', subtitle: 'Rosario, San José y oración', also: ['/rosario', '/sanjose', '/oracion'] },
+    ],
+  },
+  {
+    label: 'Música y coro',
+    items: [
+      { to: '/acordes', icon: Music, title: 'Acordes', subtitle: 'Harmonia Sacra' },
+      { to: '/afinador', icon: Mic, title: 'Afinador', subtitle: 'Diapason' },
+      { to: '/partituras', icon: FileText, title: 'Partituras', subtitle: 'Codex Notarum' },
+      { to: '/schola', icon: Award, title: 'Formación del coro', subtitle: 'Schola Cantorum' },
+    ],
+  },
+];
+
+const NAV_FOOTER: NavItem[] = [
+  { to: '/secciones', icon: FolderOpen, title: 'Todas las secciones', subtitle: 'Recursos' },
+  { to: '/tutorial', icon: HelpCircle, title: 'Guía y ayuda', subtitle: 'Vade Mecum' },
+];
+
+function isItemActive(pathname: string, item: NavItem): boolean {
+  return pathname === item.to || !!item.also?.includes(pathname);
+}
+
 // Icon-only nav item with tooltip
-function NavIcon({ to, icon: Icon, label, onClose }: { to: string; icon: React.ElementType; label: string; onClose: () => void }) {
+function NavIcon({ item, onClose }: { item: NavItem; onClose: () => void }) {
+  const { to, icon: Icon } = item;
+  const label = `${item.title} · ${item.subtitle}`;
   const location = useLocation();
-  const isActive = location.pathname === to;
+  const isActive = isItemActive(location.pathname, item);
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
@@ -104,51 +157,38 @@ export function Sidebar({ isOpen, onClose, setSongToEdit }: SidebarProps) {
       {/* ── Desktop: icon-only rail (hidden on mobile, visible on desktop >= 768px) ── */}
       <nav
         className="desktop-nav-rail print:hidden"
-        aria-label="Navegación sagrada"
+        aria-label="Menú principal"
       >
         {/* Logo Templar Cross */}
         <Link
           to="/"
           onClick={onClose}
           style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          title="VOX TEMPLI - Atrium"
+          title="VOX TEMPLI · Inicio"
         >
           <img src="/cruz-templaria.svg" width="32" height="32" alt="VOX TEMPLI" style={{ filter: 'drop-shadow(0 2px 8px rgba(185, 28, 28, 0.35))' }} />
         </Link>
 
-        {/* Main nav — Nomenclatura Sagrada */}
-        <NavIcon to="/" icon={HomeIcon} label="Atrium (Inicio)" onClose={onClose} />
-        <NavIcon to="/repertorio" icon={Book} label="Sefer Shirim (Repertorio)" onClose={onClose} />
-        <NavIcon to="/build" icon={ListMusic} label="Ordo Missae (Celebraciones)" onClose={onClose} />
-        
-        <div style={{ width: '32px', height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.08)', margin: '0.625rem 0' }} />
-        
-        <NavIcon to="/lecturas" icon={ScrollText} label="Verbum Domini (Lecturas del Día)" onClose={onClose} />
-        <NavIcon to="/rosario" icon={Sparkles} label="Corona Sanctorum (Rosario)" onClose={onClose} />
-        <NavIcon to="/liturgia" icon={BookOpen} label="Officium Divinum (Horas)" onClose={onClose} />
-        <NavIcon to="/partes-eucaristia" icon={Compass} label="Mysterium Fidei (Eucaristía)" onClose={onClose} />
-        <NavIcon to="/calendario" icon={Calendar} label="Tempora Sacra (Calendario)" onClose={onClose} />
-        
-        <div style={{ width: '32px', height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.08)', margin: '0.625rem 0' }} />
-        
-        <NavIcon to="/acordes" icon={Music} label="Harmonia Sacra (Acordes)" onClose={onClose} />
-        <NavIcon to="/schola" icon={Award} label="Schola Cantorum (Reto 30 Días y Ministerio)" onClose={onClose} />
-        <NavIcon to="/afinador" icon={Mic} label="Diapason (Afinador)" onClose={onClose} />
-        <NavIcon to="/partituras" icon={FileText} label="Codex Notarum (Partituras)" onClose={onClose} />
-        <NavIcon to="/oracion" icon={Flame} label="Oratio Cordis (Oración)" onClose={onClose} />
-        <NavIcon to="/sanjose" icon={Shield} label="Vir Fidelis (San José)" onClose={onClose} />
-        <NavIcon to="/secciones" icon={FolderOpen} label="Secciones Extra" onClose={onClose} />
+        {/* Menú principal: el nombre en español va primero */}
+        {NAV_GROUPS.map((group, groupIndex) => (
+          <React.Fragment key={group.label ?? 'principal'}>
+            {groupIndex > 0 && (
+              <div style={{ width: '32px', height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.08)', margin: '0.625rem 0' }} />
+            )}
+            {group.items.map(item => <NavIcon key={item.to} item={item} onClose={onClose} />)}
+          </React.Fragment>
+        ))}
 
         {/* Spacer */}
         <div style={{ flex: 1 }} />
 
-        <NavIcon to="/tutorial" icon={HelpCircle} label="Vade Mecum (Guía y Ayuda)" onClose={onClose} />
+        {NAV_FOOTER.map(item => <NavIcon key={item.to} item={item} onClose={onClose} />)}
 
         {/* Add song button */}
         <Link
           to="/editor"
           onClick={handleCreateSong}
-          title="Novo Cantus (Nueva Canción)"
+          title="Nuevo canto"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -201,88 +241,36 @@ export function Sidebar({ isOpen, onClose, setSongToEdit }: SidebarProps) {
 
         {/* Mobile nav items */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '0.75rem' }}>
-          {[
-            { to: '/', icon: HomeIcon, title: 'ATRIUM', subtitle: 'Inicio y Portal' },
-            { to: '/repertorio', icon: Book, title: 'SEFER SHIRIM', subtitle: 'Repertorio General' },
-            { to: '/build', icon: ListMusic, title: 'ORDO MISSAE', subtitle: 'Armar Celebración' },
-          ].map(({ to, icon: Icon, title, subtitle }) => {
-            const isActive = location.pathname === to;
-            return (
-              <Link key={to} to={to} onClick={onClose} style={{
-                display: 'flex', alignItems: 'center', gap: '0.85rem',
-                padding: '0.75rem 1rem', borderRadius: '0.75rem', marginBottom: '0.25rem',
-                backgroundColor: isActive ? 'rgba(220,38,38,0.18)' : 'transparent',
-                color: isActive ? '#f87171' : '#cbd5e1',
-                textDecoration: 'none',
-                transition: 'all 0.15s',
-              }}>
-                <Icon size={18} />
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontWeight: 700, fontSize: '0.8125rem', letterSpacing: '0.05em' }}>{title}</span>
-                  <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>{subtitle}</span>
-                </div>
-              </Link>
-            );
-          })}
-
-          <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.06)', margin: '0.75rem 0' }} />
-          <p style={{ fontSize: '0.625rem', fontWeight: 800, color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.1em', padding: '0 1rem', marginBottom: '0.5rem' }}>Sacramental & Horas</p>
-
-          {[
-            { to: '/lecturas', icon: ScrollText, title: 'VERBUM DOMINI', subtitle: 'Lecturas del Día' },
-            { to: '/rosario', icon: Sparkles, title: 'CORONA SANCTORUM', subtitle: 'Santo Rosario & Decenario' },
-            { to: '/liturgia', icon: BookOpen, title: 'OFFICIUM DIVINUM', subtitle: 'Liturgia de las Horas' },
-            { to: '/partes-eucaristia', icon: Compass, title: 'MYSTERIUM FIDEI', subtitle: 'Partes de la Eucaristía' },
-            { to: '/calendario', icon: Calendar, title: 'TEMPORA SACRA', subtitle: 'Calendario Litúrgico' },
-          ].map(({ to, icon: Icon, title, subtitle }) => {
-            const isActive = location.pathname === to;
-            return (
-              <Link key={to} to={to} onClick={onClose} style={{
-                display: 'flex', alignItems: 'center', gap: '0.85rem',
-                padding: '0.625rem 1rem', borderRadius: '0.75rem', marginBottom: '0.25rem',
-                backgroundColor: isActive ? 'rgba(220,38,38,0.18)' : 'transparent',
-                color: isActive ? '#f87171' : '#cbd5e1',
-                textDecoration: 'none',
-              }}>
-                <Icon size={16} />
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontWeight: 700, fontSize: '0.8125rem', letterSpacing: '0.05em' }}>{title}</span>
-                  <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>{subtitle}</span>
-                </div>
-              </Link>
-            );
-          })}
-
-          <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.06)', margin: '0.75rem 0' }} />
-          <p style={{ fontSize: '0.625rem', fontWeight: 800, color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.1em', padding: '0 1rem', marginBottom: '0.5rem' }}>Ministerio & Acordes</p>
-
-          {[
-            { to: '/acordes', icon: Music, title: 'HARMONIA SACRA', subtitle: 'Glosario de Acordes' },
-            { to: '/schola', icon: Award, title: 'SCHOLA CANTORUM', subtitle: 'Reto 30 Días, Ritmos & Ministerio' },
-            { to: '/afinador', icon: Mic, title: 'DIAPASON', subtitle: 'Afinador de Frecuencia' },
-            { to: '/partituras', icon: FileText, title: 'CODEX NOTARUM', subtitle: 'Partituras de Málaga' },
-            { to: '/oracion', icon: Flame, title: 'ORATIO CORDIS', subtitle: 'Canciones para Orar' },
-            { to: '/sanjose', icon: Shield, title: 'VIR FIDELIS', subtitle: 'Rincón de San José' },
-            { to: '/secciones', icon: FolderOpen, title: 'RECURSOS', subtitle: 'Secciones Pastorales' },
-            { to: '/tutorial', icon: HelpCircle, title: 'VADE MECUM', subtitle: 'Guía y Tutorial' },
-          ].map(({ to, icon: Icon, title, subtitle }) => {
-            const isActive = location.pathname === to;
-            return (
-              <Link key={to} to={to} onClick={onClose} style={{
-                display: 'flex', alignItems: 'center', gap: '0.85rem',
-                padding: '0.625rem 1rem', borderRadius: '0.75rem', marginBottom: '0.25rem',
-                backgroundColor: isActive ? 'rgba(220,38,38,0.18)' : 'transparent',
-                color: isActive ? '#f87171' : '#cbd5e1',
-                textDecoration: 'none',
-              }}>
-                <Icon size={16} />
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontWeight: 700, fontSize: '0.8125rem', letterSpacing: '0.05em' }}>{title}</span>
-                  <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>{subtitle}</span>
-                </div>
-              </Link>
-            );
-          })}
+          {[...NAV_GROUPS, { label: 'Más', items: NAV_FOOTER }].map((group, groupIndex) => (
+            <React.Fragment key={group.label ?? 'principal'}>
+              {groupIndex > 0 && (
+                <>
+                  <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.06)', margin: '0.75rem 0' }} />
+                  <p style={{ fontSize: '0.625rem', fontWeight: 800, color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.1em', padding: '0 1rem', marginBottom: '0.5rem' }}>{group.label}</p>
+                </>
+              )}
+              {group.items.map(item => {
+                const { to, icon: Icon, title, subtitle } = item;
+                const isActive = isItemActive(location.pathname, item);
+                return (
+                  <Link key={to} to={to} onClick={onClose} aria-current={isActive ? 'page' : undefined} style={{
+                    display: 'flex', alignItems: 'center', gap: '0.85rem',
+                    padding: groupIndex === 0 ? '0.75rem 1rem' : '0.625rem 1rem', borderRadius: '0.75rem', marginBottom: '0.25rem',
+                    backgroundColor: isActive ? 'rgba(220,38,38,0.18)' : 'transparent',
+                    color: isActive ? '#f87171' : '#cbd5e1',
+                    textDecoration: 'none',
+                    transition: 'all 0.15s',
+                  }}>
+                    <Icon size={groupIndex === 0 ? 18 : 16} />
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontWeight: 700, fontSize: '0.875rem' }}>{title}</span>
+                      <span style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>{subtitle}</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </React.Fragment>
+          ))}
         </div>
 
         {/* Mobile footer */}
@@ -293,7 +281,7 @@ export function Sidebar({ isOpen, onClose, setSongToEdit }: SidebarProps) {
             color: 'white', borderRadius: '0.75rem', fontWeight: 700, fontSize: '0.875rem',
             textDecoration: 'none', boxShadow: '0 4px 16px rgba(220,38,38,0.4)',
           }}>
-            <Plus size={18} /> Novo Cantus (Nuevo)
+            <Plus size={18} /> Nuevo canto
           </Link>
         </div>
       </div>
