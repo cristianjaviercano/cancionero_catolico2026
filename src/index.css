@@ -739,6 +739,61 @@ body.stage-mode [data-lyric-tone="gris"] { --lyric-tone: #a8a29e; }
   border: 1px solid var(--line);
 }
 
+/* Calendario de celebraciones guardadas (armador de la Eucaristía) */
+.saved-cal-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.saved-cal-cell:hover { background-color: var(--surface-highlight); }
+.saved-cal-cell.is-today { border-color: var(--gold); }
+.saved-cal-cell.has-mass { background-color: var(--accent-color); color: #fff; font-weight: 700; }
+.saved-cal-cell.has-mass:hover { background-color: var(--accent-hover); }
+body.stage-mode .saved-cal-cell.has-mass { color: #1c1917; }
+.saved-cal-cell.is-selected { outline: 2px solid var(--text-primary); outline-offset: 1px; }
+.saved-cal-bar {
+  position: absolute;
+  left: 24%;
+  right: 24%;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 2px;
+}
+.saved-cal-cell.has-mass .saved-cal-bar { display: none; }
+.saved-cal-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 8px;
+  background-color: var(--surface-color);
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: 700;
+}
+.saved-cal-legend {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background-color: var(--accent-color);
+}
+
 /* Navigation */
 .nav {
   display: flex;

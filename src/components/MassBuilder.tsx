@@ -5,7 +5,10 @@ import { parseSongContent, formatChord, detectSongKey, transposeChord } from '..
 import { SongViewer } from './SongViewer';
 import { ChordDiagram } from './ChordDiagram';
 import { SectionLayout } from './SectionLayout';
-import { LiturgicalCalendarPicker } from './LiturgicalCalendarPicker';
+import { LiturgicalCalendarPicker, formatLiturgicalDate } from './LiturgicalCalendarPicker';
+import { SavedMassesCalendar } from './SavedMassesCalendar';
+import { getLiturgicalDay, todayIso } from '../utils/liturgicalCalendar';
+import { parseSpanishDate, isDateId, getMassDateIso, getMassName, nextFreeDateId, isoToLocalDate } from '../utils/massDates';
 import { auth, db, googleProvider } from '../firebase';
 import { onAuthStateChanged, signInWithPopup } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
@@ -134,6 +137,11 @@ function massDocId(name: string): string {
   return id === '.' || id === '..' ? `${id}_` : id;
 }
 
+// ID de la copia publicada en la comunidad (misma fórmula de siempre: usuario + ID de la celebración)
+function publicMassDocId(uid: string, massId: string): string {
+  return `${uid}_${massId.replace(/\s+/g, '_')}`;
+}
+
 interface MassPart {
   id: string;
   name: string;
@@ -193,6 +201,8 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
   const [selectingForId, setSelectingForId] = useState<string | null>(null);
   const [previewSong, setPreviewSong] = useState<Song | null>(null);
   const [saveName, setSaveName] = useState(draft?.saveName || '');
+  // ID de la celebración guardada que está abierta (null = borrador nuevo o plantilla)
+  const [loadedId, setLoadedId] = useState<string | null>(draft?.loadedId || null);
 
   const [showShareModal, setShowShareModal] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -224,6 +234,7 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
     const draftData = {
       playlist,
       saveName,
+      loadedId,
       printTitle,
       printDate,
       printReason,
@@ -234,7 +245,7 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
       printChords
     };
     localStorage.setItem('massBuilderDraft', JSON.stringify(draftData));
-  }, [playlist, saveName, printTitle, printDate, printReason, printGroup, printLayout, printTarget, printQuote, printChords]);
+  }, [playlist, saveName, loadedId, printTitle, printDate, printReason, printGroup, printLayout, printTarget, printQuote, printChords]);
 
   const handleClearDraft = () => {
     if (!window.confirm('¿Estás seguro de querer limpiar todo el borrador actual y empezar de cero?')) return;
@@ -245,6 +256,7 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
       song: null
     })));
     setSaveName('');
+    setLoadedId(null);
     setPrintTitle('');
     setPrintReason('');
     setPrintGroup('');
@@ -409,18 +421,39 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
 
   const isReadyToPlay = getPlaylistArray().length > 0;
 
+  // La fecha de la celebración sale del campo "Fecha Litúrgica"; es el ID con el que se guarda
+  const massDateIso = parseSpanishDate(printDate) ?? todayIso();
+
   const handleSave = async () => {
-    if (!saveName.trim() || !isReadyToPlay) return;
-    if (savedMasses[saveName] || savedMasses[massDocId(saveName)]) {
-      const confirmOverwrite = window.confirm(`Ya existe una celebración llamada "${saveName}". ¿Deseas sobrescribirla con los cambios actuales?`);
+    if (!isReadyToPlay) return;
+    const dateIso = massDateIso;
+    const massName = saveName.trim() || printTitle.trim() || getLiturgicalDay(dateIso).title;
+    const dateLabel = formatLiturgicalDate(isoToLocalDate(dateIso));
+    const sameName = (id: string) => getMassName(id, savedMasses[id]).trim().toLowerCase() === massName.toLowerCase();
+
+    // ¿Ya hay una celebración con ese nombre en esa fecha? Se reemplaza; si no, se crea con el siguiente ID libre del día
+    const existingId = Object.keys(savedMasses).find(id => isDateId(id) && id.slice(0, 10) === dateIso && sameName(id));
+    if (existingId && existingId !== loadedId) {
+      const confirmOverwrite = window.confirm(`Ya existe "${massName}" el ${dateLabel}. ¿Deseas reemplazarla con los cambios actuales?`);
       if (!confirmOverwrite) return;
     }
-    
+    const targetId = existingId ?? nextFreeDateId(dateIso, Object.keys(savedMasses));
+
+    // Una celebración antigua (su ID era el nombre) pasa al ID por fecha al volver a guardarla
+    const legacyId = loadedId && loadedId !== targetId && !isDateId(loadedId) && savedMasses[loadedId]
+      && getMassDateIso(loadedId, savedMasses[loadedId]) === dateIso && sameName(loadedId)
+      ? loadedId
+      : null;
+    const previous = (savedMasses[existingId ?? legacyId ?? ''] ?? null) as { isPublic?: boolean } | null;
+    const keepPublic = !!user && !!previous?.isPublic;
+
     // Guardar la lista de reproducción junto con los metadatos de presentación
     const newMassData = {
       playlist,
       metadata: {
-        title: printTitle || saveName,
+        name: massName,
+        dateIso,
+        title: printTitle || massName,
         date: printDate,
         reason: printReason,
         group: printGroup,
@@ -429,24 +462,40 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
         printTarget,
         quote: printQuote,
         printChords
-      }
+      },
+      ...(keepPublic ? { isPublic: true } : {})
     };
-    
+
     if (user) {
       try {
-        // Al guardar siempre es privado. El estado público se maneja con el toggle.
-        await setDoc(doc(db, 'users', user.uid, 'savedMasses', massDocId(saveName)), newMassData);
-        alert('¡Celebración Eucarística guardada con éxito en la nube!');
+        await setDoc(doc(db, 'users', user.uid, 'savedMasses', targetId), newMassData);
+        if (keepPublic) {
+          // Si ya estaba publicada, la copia de la comunidad se actualiza con los cambios
+          await setDoc(doc(db, 'publicMasses', publicMassDocId(user.uid, targetId)), {
+            ...newMassData,
+            userId: user.uid,
+            authorName: user.displayName || user.email || 'Músico Anónimo',
+            createdAt: serverTimestamp()
+          });
+        }
+        if (legacyId) {
+          await deleteDoc(doc(db, 'users', user.uid, 'savedMasses', legacyId));
+          await deleteDoc(doc(db, 'publicMasses', publicMassDocId(user.uid, legacyId))).catch(() => {});
+        }
+        setLoadedId(targetId);
+        alert(`¡Celebración guardada en la nube!\n\n${dateLabel}\nID: ${targetId}`);
       } catch (error) {
         console.error("Error al guardar celebración en Firestore:", error);
         alert("Error al guardar en la nube. Inténtalo de nuevo.");
       }
     } else {
-      const newSavedMasses = { ...savedMasses, [saveName]: newMassData as unknown as MassPart[] };
+      const newSavedMasses = { ...savedMasses, [targetId]: newMassData as unknown as MassPart[] };
+      if (legacyId) delete newSavedMasses[legacyId];
       setSavedMasses(newSavedMasses);
       localStorage.setItem('savedMasses', JSON.stringify(newSavedMasses));
+      setLoadedId(targetId);
       const shouldLogin = window.confirm(
-        '¡Celebración guardada con éxito en este equipo!\n\n' +
+        `¡Celebración guardada en este equipo!\n${dateLabel} · ID: ${targetId}\n\n` +
         '⚠️ ATENCIÓN: Como no has iniciado sesión con Google, esta celebración se guardó únicamente en este navegador y NO aparecerá en tus otros dispositivos (iPad, celular).\n\n' +
         '¿Deseas iniciar sesión con Google ahora para sincronizarla en la nube?'
       );
@@ -472,7 +521,8 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
 
   const handleLoad = (name: string, overrideData?: any) => {
     const data = overrideData || savedMasses[name];
-    console.log("LOADED MASS DATA:", name, data);
+    // Una misa de la comunidad se abre como plantilla: no queda ligada a ninguna guardada
+    const isOwnSaved = !overrideData;
     if (Array.isArray(data)) {
       // Retrocompatibilidad con el formato antiguo (solo arreglo de partes)
       setPlaylist(data);
@@ -500,19 +550,40 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
       setPrintQuote(saved.metadata?.quote || '');
       setPrintChords(saved.metadata?.printChords || 'none');
     }
-    setSaveName(name);
+    if (isOwnSaved) {
+      // La fecha del calendario manda: si los datos traían otra (o ninguna), se corrige el campo de fecha
+      const dateIso = getMassDateIso(name, data);
+      const savedDate = Array.isArray(data) ? undefined : (data as { metadata?: { date?: string } } | null)?.metadata?.date;
+      if (dateIso && parseSpanishDate(savedDate) !== dateIso) {
+        setPrintDate(formatLiturgicalDate(isoToLocalDate(dateIso)));
+      }
+      setSaveName(getMassName(name, data));
+      setLoadedId(name);
+    } else {
+      setSaveName(name);
+      setLoadedId(null);
+    }
+    setShowSaved(false);
+  };
+
+  // Desde el calendario de guardadas: volver al armador con esa fecha puesta
+  const handleNewForDate = (dateIso: string) => {
+    setPrintDate(formatLiturgicalDate(isoToLocalDate(dateIso)));
+    setLoadedId(null);
     setShowSaved(false);
   };
 
   const deleteSavedMass = async (name: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!window.confirm(`¿Estás seguro de eliminar la celebración "${name}"?`)) return;
+    const label = isDateId(name) ? `${getMassName(name, savedMasses[name])} (${name})` : name;
+    if (!window.confirm(`¿Estás seguro de eliminar la celebración "${label}"?`)) return;
+    if (loadedId === name) setLoadedId(null);
     
     if (user) {
       try {
         await deleteDoc(doc(db, 'users', user.uid, 'savedMasses', name));
         // Remove from public as well if it existed
-        const publicMassId = `${user.uid}_${name.replace(/\s+/g, '_')}`;
+        const publicMassId = publicMassDocId(user.uid, name);
         await deleteDoc(doc(db, 'publicMasses', publicMassId)).catch(() => {});
       } catch (error) {
         console.error("Error deleting from Firestore", error);
@@ -535,7 +606,7 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
     if (!currentData) return;
     
     const isCurrentlyPublic = !!currentData.isPublic;
-    const publicMassId = `${user.uid}_${massName.replace(/\s+/g, '_')}`;
+    const publicMassId = publicMassDocId(user.uid, massName);
     
     try {
       if (isCurrentlyPublic) {
@@ -565,6 +636,7 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
 
   const loadTemplate = (templateId: string) => {
     setSaveName('');
+    setLoadedId(null);
     setPrintTitle('');
     setPrintReason('');
     setPrintGroup('');
@@ -846,7 +918,6 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
 
   // View: Saved Masses
   if (showSaved) {
-    const savedKeys = Object.keys(savedMasses);
     const publicKeys = Object.keys(publicMasses);
     return (
       <div className="card animate-in fade-in duration-200">
@@ -888,49 +959,14 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
         )}
 
         {activeSavedTab === 'my-masses' ? (
-          savedKeys.length === 0 ? (
-            <div className="text-stone-500 text-center py-8">No hay celebraciones guardadas.</div>
-          ) : (
-            <div className="flex flex-col gap-3">
-              {savedKeys.map(key => {
-                const isPublic = !!(savedMasses[key] as any).isPublic;
-                return (
-                <div key={key} className="bg-white p-4 rounded-lg flex justify-between items-center cursor-pointer hover:bg-stone-100 border border-stone-200" onClick={() => handleLoad(key)}>
-                  <div className="flex items-center gap-2">
-                    <div className="font-semibold text-lg">{key}</div>
-                    {isPublic && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
-                        Pública
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {user && (
-                      <label 
-                        className="flex items-center gap-1.5 text-xs cursor-pointer bg-white border border-stone-200 px-2 py-1.5 rounded shadow-sm"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <span className="text-stone-500 font-medium">Publicar</span>
-                        <div className="relative inline-block w-8 h-4">
-                          <input 
-                            type="checkbox" 
-                            className="sr-only peer"
-                            checked={isPublic}
-                            onChange={(e) => togglePublicStatus(key, e as any)}
-                          />
-                          <div className="w-8 h-4 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-emerald-500"></div>
-                        </div>
-                      </label>
-                    )}
-                    <button className="btn btn-icon bg-stone-50 text-stone-500 hover:text-red-400" onClick={(e) => deleteSavedMass(key, e)} title="Eliminar guardado">
-                      <X size={18} />
-                    </button>
-                  </div>
-                </div>
-                );
-              })}
-            </div>
-          )
+          <SavedMassesCalendar
+            masses={savedMasses}
+            canPublish={!!user}
+            onLoad={(id) => handleLoad(id)}
+            onDelete={deleteSavedMass}
+            onTogglePublic={togglePublicStatus}
+            onNewForDate={handleNewForDate}
+          />
         ) : (
           publicKeys.length === 0 ? (
             <div className="text-stone-500 text-center py-8">No hay misas públicas en la comunidad todavía.</div>
@@ -1069,17 +1105,20 @@ export function MassBuilder({ songs, onPlayMass, onBroadcastMass, onCreateSong, 
               <div className="flex bg-white rounded-xl overflow-hidden shadow-sm flex-1 md:flex-initial" style={{ border: 'none' }}>
                 <input 
                   type="text" 
-                  placeholder="Nombre para guardar..." 
+                  placeholder="Nombre (opcional)" 
+                  aria-label="Nombre de la celebración (opcional)" 
                   className="bg-transparent px-3 py-2 text-xs text-stone-800 focus:outline-none w-full md:w-40 border-none"
                   value={saveName}
                   onChange={e => setSaveName(e.target.value)}
                 />
                 <button 
-                  className="px-3 py-2 bg-stone-50 hover:bg-red-50 text-stone-600 hover:text-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed border-none cursor-pointer"
-                  disabled={!saveName.trim() || !isReadyToPlay}
+                  className="px-3 py-2 flex items-center whitespace-nowrap shrink-0 bg-stone-50 hover:bg-red-50 text-stone-600 hover:text-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed border-none cursor-pointer"
+                  disabled={!isReadyToPlay}
                   onClick={handleSave}
-                  title="Guardar Códice"
+                  title={isReadyToPlay ? `Guardar con la fecha ${massDateIso} (se cambia en "Fecha Litúrgica")` : 'Asigna al menos un canto para guardar'}
+                  aria-label="Guardar celebración"
                 >
+                  <span className="font-mono text-[10px] font-bold mr-1.5">{massDateIso}</span>
                   <Save size={16} />
                 </button>
               </div>
